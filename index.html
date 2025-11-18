@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="night"> <!-- NEW: Default theme set here -->
+<html lang="en" data-theme="night"> <!-- Default theme set here -->
 <head>
   <meta charset="UTF-8" />
   <title>Aynu CEX – AMRChain Cosmic Exchange</title>
@@ -36,7 +36,7 @@
       --nav-h: 64px;
     }
     
-    /* NEW: Evening Theme */
+    /* Evening Theme */
     [data-theme="evening"] {
       --bg-main: radial-gradient(circle at top, #2a1b3f 0%, #170517 45%, #090209 100%);
       --bg-panel: rgba(22, 11, 36, 0.96);
@@ -45,15 +45,14 @@
       --accent-2: #ff37a8;
     }
 
-
-    /* NEW: Night Theme (Default) */
+    /* Night Theme (Default) */
     [data-theme="night"] {
       --bg-main: radial-gradient(circle at top, #0f122e 0%, #050617 45%, #020309 100%);
       --bg-panel: rgba(10, 12, 34, 0.96);
       --border-soft: rgba(137, 160, 255, 0.35);
     }
 
-    /* NEW: Holographic Theme */
+    /* Holographic Theme */
     [data-theme="holographic"] {
       --bg-main: #020309;
       --bg-panel: rgba(10, 25, 40, 0.85);
@@ -135,12 +134,25 @@
       flex-direction: column;
       backdrop-filter: blur(10px);
     }
-    /* NEW: Page container for Spot/Futures/Metals */
+    /* Page container for Spot/Futures/Metals */
     .page-container {
       flex: 1;
       display: flex;
       flex-direction: column;
       min-height: 0;
+    }
+    
+    /* NEW: Demo Mode Banner */
+    #demo-mode-banner {
+      display: none; /* Hidden by default */
+      background: linear-gradient(135deg, var(--warning), var(--accent-1));
+      color: #000;
+      text-align: center;
+      padding: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
     }
 
     /* =========================
@@ -182,18 +194,25 @@
         0 0 32px rgba(99, 236, 255, 0.5);
       position: relative;
       overflow: hidden;
+      /* NEW: Center the SVG */
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     [data-theme="holographic"] .nav-logo-orca {
       box-shadow: 0 0 18px var(--accent-1), 0 0 32px var(--accent-1);
     }
-    .nav-logo-orca::after {
-      content: "";
-      position: absolute;
-      inset: 18%;
-      border-radius: 50%;
-      border: 2px solid rgba(255, 255, 255, 0.12);
-      box-shadow: 0 0 24px rgba(255, 255, 255, 0.35);
+    /* REMOVED: ::after */
+    
+    /* NEW: Dolphin SVG */
+    .nav-logo-orca svg {
+      width: 65%;
+      height: 65%;
+      fill: rgba(255, 255, 255, 0.9);
+      filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.7));
+      transform: rotate(-10deg) translateY(-2px);
     }
+    
     .nav-logo-text {
       display: flex;
       flex-direction: column;
@@ -332,7 +351,8 @@
     .hud-strip {
       grid-column: 1 / 4; /* Span all 3 columns */
       display: grid;
-      grid-template-columns: 1.2fr repeat(4, 1fr);
+      /* NEW: 6 columns for futures data */
+      grid-template-columns: 1.2fr repeat(5, 1fr);
       gap: 8px;
       padding: 6px 8px;
       border-radius: var(--radius-lg);
@@ -351,6 +371,10 @@
       flex-direction: column;
       justify-content: center;
     }
+    /* NEW: Hide/show blocks based on mode */
+    .hud-block.futures-only { display: none; }
+    .hud-block.spot-only { display: flex; }
+
     .hud-label {
       font-size: 11px;
       color: var(--text-muted);
@@ -494,19 +518,27 @@
     .order-row span {
       padding: 0 2px;
     }
+    /* Depth background for order rows */
     .order-row::before {
       content: "";
       position: absolute;
-      inset: 1px;
-      border-radius: 3px;
-      z-index: -1;
+      top: 1px;
+      bottom: 1px;
+      right: 0; /* Align to right */
+      width: var(--depth, 0%); /* Use CSS var for depth */
+      z-index: 0;
       opacity: 0.3;
+      transition: width 0.1s linear;
+    }
+    .order-row span {
+        position: relative; /* Ensure text is above background */
+        z-index: 1;
     }
     .order-row.ask::before {
-      background: linear-gradient(90deg, transparent, var(--danger));
+      background: var(--danger);
     }
     .order-row.bid::before {
-      background: linear-gradient(90deg, transparent, var(--success));
+      background: var(--success);
     }
     .order-mid {
       display: flex;
@@ -523,32 +555,7 @@
     /* =========================
         CENTER COL: CHART
     ========================== */
-    .mode-tabs {
-      display: inline-flex;
-      align-self: flex-start;
-      margin: 2px 0 2px 2px;
-      padding: 2px;
-      border-radius: 999px;
-      background: rgba(10, 14, 40, 0.95);
-      border: 1px solid var(--border-soft);
-      flex-shrink: 0;
-    }
-    .mode-tab {
-      border: none;
-      border-radius: 999px;
-      padding: 5px 12px;
-      font-size: 11px;
-      color: var(--text-muted);
-      background: transparent;
-      cursor: pointer;
-      transition: background var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
-    }
-    .mode-tab.active {
-      background: radial-gradient(circle at top, var(--accent-1), rgba(70, 90, 160, 0.98));
-      color: #ffffff;
-      transform: translateY(-1px);
-      box-shadow: 0 0 12px var(--accent-1);
-    }
+    /* REMOVED: .mode-tabs, now controlled by main nav */
     
     .chart-panel {
       border-radius: var(--radius-lg);
@@ -603,6 +610,7 @@
       align-items: center;
       gap: 6px;
       flex-wrap: wrap;
+      position: relative; /* For indicators popover */
     }
     .chart-type-switch {
       display: inline-flex;
@@ -629,6 +637,60 @@
       transform: translateY(-1px);
       box-shadow: 0 0 8px var(--accent-1);
     }
+    
+    /* NEW: Indicators Button */
+    .chart-indicators-btn {
+      border-radius: 999px;
+      border: 1px solid var(--border-soft);
+      background: rgba(16, 20, 52, 0.96);
+      padding: 3px 8px;
+      font-size: 10px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--text-muted);
+      transition: background var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+    }
+    .chart-indicators-btn:hover {
+      background: var(--accent-1);
+      color: #ffffff;
+      transform: translateY(-1px);
+      box-shadow: 0 0 10px var(--accent-1);
+    }
+    
+    /* NEW: Indicators Popover */
+    #indicators-panel {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 100%;
+      margin-top: 4px;
+      background: rgba(18, 22, 58, 0.98);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-md);
+      padding: 8px;
+      z-index: 20;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+      backdrop-filter: blur(5px);
+      font-size: 11px;
+      width: 160px;
+    }
+    #indicators-panel.active {
+      display: block;
+    }
+    #indicators-panel label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px;
+      cursor: pointer;
+      border-radius: var(--radius-sm);
+    }
+    #indicators-panel label:hover {
+      background: rgba(110, 130, 255, 0.1);
+    }
+    
     .chart-settings-toggle {
       border-radius: 999px;
       border: 1px solid var(--border-soft);
@@ -688,6 +750,8 @@
     .chart-settings-row input[type="checkbox"] {
       cursor: pointer;
     }
+    
+    /* NEW: Chart Canvas Layout */
     .chart-canvas {
       width: 100%;
       height: 100%; /* Fill parent chart-panel */
@@ -696,7 +760,22 @@
         linear-gradient(180deg, rgba(21, 28, 68, 0.95), rgba(5, 6, 20, 0.98));
       position: relative;
       overflow: hidden;
+      /* NEW: Split layout for sub-charts */
+      display: flex;
+      flex-direction: column;
     }
+    .chart-price-wrapper {
+      flex: 3;
+      position: relative;
+      min-height: 150px;
+    }
+    .chart-sub-wrapper {
+      flex: 1;
+      position: relative;
+      min-height: 50px;
+      border-top: 1px solid var(--border-soft);
+    }
+    
     [data-theme="holographic"] .chart-canvas {
       background: linear-gradient(180deg, rgba(10, 30, 45, 0.95), rgba(5, 10, 20, 0.98));
     }
@@ -749,6 +828,8 @@
       animation: chartWave 9s ease-in-out infinite alternate;
       pointer-events: none;
     }
+    
+    /* NEW: Canvas positioning */
     .chart-canvas canvas {
       position: absolute;
       inset: 0;
@@ -756,6 +837,11 @@
       height: 100%;
       display: block;
       cursor: crosshair;
+    }
+    /* Drawing canvas, on top of price chart but below UI */
+    .chart-canvas canvas#draw-canvas {
+        z-index: 1; /* Above price, below UI */
+        pointer-events: none; /* Interact via main canvas */
     }
     .chart-canvas canvas.y-axis-grabbing {
       cursor: ns-resize;
@@ -772,7 +858,9 @@
     .trade-panel {
       display: flex;
       flex-direction: column;
-      flex-shrink: 0; /* Prevent shrinking */
+      /* MODIFIED: Make panel flexible */
+      flex: 0.8;
+      min-height: 250px;
     }
     .trade-toggle {
       display: inline-flex;
@@ -817,6 +905,14 @@
       flex-direction: column;
       gap: 2px;
     }
+    /* Hideable form row */
+    .form-row.hideable {
+        display: none; /* Hidden by default */
+    }
+    /* NEW: Hide/show based on mode */
+    .form-row.futures-only { display: none; }
+    .form-row.spot-only { display: flex; }
+
     .form-row label {
       color: var(--text-muted);
       padding-left: 2px;
@@ -850,6 +946,11 @@
       color: var(--text-main);
       font-size: 13px;
       font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+    /* Style for disabled inputs */
+    .input-shell input:disabled {
+        background: rgba(40, 50, 80, 0.2);
+        color: var(--text-muted);
     }
     .input-shell span.suffix {
       padding: 0 8px;
@@ -900,6 +1001,73 @@
       transform: translateY(-1px);
       box-shadow: 0 0 14px rgba(255, 255, 255, 0.7);
     }
+    /* SL/TP Row for Futures */
+    .futures-sl-tp-row {
+        display: none; /* Hidden by default */
+        gap: 6px;
+    }
+
+    /* NEW: Leverage Dropdown Styles */
+    .leverage-dropdown-btn {
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-soft);
+      background: rgba(5, 7, 23, 0.98);
+      color: var(--text-main);
+      font-size: 13px;
+      padding: 6px 10px;
+      cursor: pointer;
+      text-align: left;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: "JetBrains Mono", monospace;
+    }
+    .leverage-dropdown-btn:hover {
+      border-color: var(--border-strong);
+    }
+    .leverage-popover {
+      display: none;
+      position: absolute;
+      bottom: 100%; /* Show above the button */
+      left: 0;
+      right: 0;
+      background: rgba(18, 22, 58, 0.98);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-md);
+      padding: 8px;
+      z-index: 20;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.6);
+      backdrop-filter: blur(5px);
+    }
+    .leverage-popover.active {
+      display: block;
+    }
+    .leverage-quick-btns {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 8px;
+    }
+    .leverage-quick-btn {
+      flex: 1;
+      border-radius: 999px;
+      border: 1px solid var(--border-soft);
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 10px;
+      padding: 4px 0;
+      cursor: pointer;
+      transition: background var(--transition-fast), color var(--transition-fast);
+    }
+    .leverage-quick-btn:hover {
+      background: radial-gradient(circle at top, var(--accent-1), rgba(54, 65, 137, 0.95));
+      color: #ffffff;
+    }
+    .leverage-popover label {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
 
     /* Digital Metals section (inside trade panel) */
     .metals-grid {
@@ -970,7 +1138,8 @@
         CENTER COL: POSITIONS
     ========================== */
     .positions-panel {
-      flex: 1; /* Take remaining space */
+      /* MODIFIED: Make panel flexible */
+      flex: 0.7;
       min-height: 150px; /* Min height */
     }
     .positions-table-wrapper {
@@ -1151,136 +1320,77 @@
     }
 
     /* =========================
-        LOGIN / REGISTER / ZK-KYS MODAL
+        NEW: RIGHT COL: TOKEN INFO
     ========================== */
-    .modal-backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(1, 2, 16, 0.85);
-      backdrop-filter: blur(5px);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 20;
+    .token-info-panel {
+      flex: 1.2; /* Give it space */
+      min-height: 200px;
     }
-    .modal-backdrop.active {
+    .token-info-header {
       display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
     }
-    .auth-modal {
-      width: 340px;
-      max-width: 95vw;
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--border-strong);
-      background:
-        radial-gradient(circle at top, rgba(134, 168, 255, 0.45), transparent 65%),
-        rgba(4, 6, 22, 0.98);
-      box-shadow: 0 0 36px rgba(0, 0, 0, 0.92);
-      padding: 12px 14px 14px;
+    .token-info-logo {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--accent-1);
+    }
+    .token-info-title-wrap {
       display: flex;
       flex-direction: column;
-      gap: 8px;
     }
-    [data-theme="holographic"] .auth-modal {
-      background:
-        radial-gradient(circle at top, var(--accent-1), transparent 65%),
-        rgba(4, 20, 30, 0.98);
-      border: 1px solid var(--accent-1);
-    }
-    .auth-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .auth-title {
-      font-size: 15px;
+    .token-info-title {
+      font-size: 16px;
       font-weight: 600;
     }
-    .auth-sub {
+    .token-info-symbol {
       font-size: 11px;
       color: var(--text-muted);
     }
-    .auth-close {
-      border-radius: 999px;
-      border: none;
-      background: rgba(12, 16, 40, 0.98);
+    .token-info-body {
+      padding: 4px 10px 10px;
+      font-size: 11px;
       color: var(--text-muted);
-      width: 22px;
-      height: 22px;
-      cursor: pointer;
-      font-size: 12px;
+      flex: 1;
+      overflow-y: auto;
     }
-    .auth-form {
-      display: flex;
-      flex-direction: column;
+    .token-info-description {
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+    .token-info-metrics {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: 8px;
-      margin-top: 4px;
     }
-    .auth-row {
+    .token-info-metric {
       display: flex;
       flex-direction: column;
       gap: 2px;
-      font-size: 11px;
+      background: rgba(5, 7, 24, 0.98);
+      border-radius: var(--radius-sm);
+      padding: 5px 8px;
+      border: 1px solid var(--border-soft);
     }
-    .auth-row label {
+    .token-info-metric-label {
+      font-size: 10px;
       color: var(--text-muted);
+      text-transform: uppercase;
     }
-    .auth-row input {
-      border-radius: var(--radius-md);
-      border: 1px solid var(--border-strong);
-      background: rgba(5, 7, 26, 0.98);
-      padding: 6px 8px;
+    .token-info-metric-value {
       font-size: 12px;
       color: var(--text-main);
-      outline: none;
+      font-family: "JetBrains Mono", monospace;
     }
-    .auth-row small {
-      font-size: 10px;
-      color: var(--text-muted);
-    }
-    .auth-actions {
-      display: flex;
-      justify-content: space-between;
-      gap: 8px;
-      margin-top: 4px;
-    }
-    .auth-btn {
-      flex: 1;
-      border-radius: 999px;
-      border: none;
-      padding: 6px 0;
-      font-size: 12px;
-      cursor: pointer;
-      background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
-      color: #ffffff;
-      box-shadow: 0 0 12px var(--accent-2);
-    }
-    .auth-btn.secondary {
-      background: rgba(17, 23, 60, 0.98);
-      box-shadow: none;
-    }
-    .auth-footer {
-      margin-top: 6px;
-      font-size: 10px;
-      color: var(--text-muted);
-    }
-    .zk-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      padding: 3px 8px;
-      border-radius: 999px;
-      border: 1px solid var(--border-strong);
-      background: rgba(4, 12, 28, 0.98);
-      font-size: 10px;
-      color: var(--text-muted);
-    }
-    .zk-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: rgba(80, 227, 194, 0.95);
-      box-shadow: 0 0 10px rgba(128, 222, 234, 0.9);
-    }
+
+
+    /* =========================
+        MODALS
+    ========================== */
+    /* REMOVED: Wallet Modal */
 
     /* Toasts */
     .toast-container {
@@ -1345,108 +1455,8 @@
     }
 
     /* =========================
-        NEW: HOLOGRAPHIC METALS VAULT
+        REMOVED: HOLOGRAPHIC METALS VAULT
     ========================== */
-    .vault-layout {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      padding: 16px;
-      gap: 16px;
-    }
-    .vault-display {
-      flex-basis: 300px;
-      flex-shrink: 0;
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--border-soft);
-      background: var(--bg-panel);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      perspective: 800px; /* 3D space */
-      position: relative;
-      overflow: hidden;
-    }
-    .hologram-object {
-      width: 150px;
-      height: 150px;
-      transform-style: preserve-3d;
-      animation: hologram-rotate 20s linear infinite;
-    }
-    .hologram-face {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      border-radius: 10px;
-      background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
-      box-shadow: 0 0 20px var(--accent-1), 0 0 40px var(--accent-2);
-      opacity: 0.8;
-    }
-    /* Simple 3D cube effect */
-    .hologram-face.front  { transform: translateZ(75px); }
-    .hologram-face.back   { transform: translateZ(-75px) rotateY(180deg); }
-    .hologram-face.left   { transform: translateX(-75px) rotateY(-90deg); }
-    .hologram-face.right  { transform: translateX(75px) rotateY(90deg); }
-    .hologram-face.top    { transform: translateY(-75px) rotateX(90deg); }
-    .hologram-face.bottom { transform: translateY(75px) rotateX(-90deg); }
-
-    .hologram-info {
-      position: absolute;
-      bottom: 20px;
-      left: 20px;
-      color: var(--text-main);
-      text-shadow: 0 0 5px #000;
-    }
-    .hologram-title {
-      font-size: 22px;
-      font-weight: 600;
-    }
-    .hologram-price {
-      font-size: 16px;
-      color: var(--text-muted);
-    }
-    @keyframes hologram-rotate {
-      0% { transform: rotateY(0deg) rotateX(10deg); }
-      100% { transform: rotateY(360deg) rotateX(10deg); }
-    }
-
-    .vault-grid {
-      flex: 1;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 12px;
-      overflow-y: auto;
-    }
-    .vault-metal-card {
-      border-radius: var(--radius-md);
-      border: 1px solid var(--border-soft);
-      background: var(--bg-panel);
-      padding: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      cursor: pointer;
-      transition: transform var(--transition-fast), box-shadow var(--transition-fast);
-    }
-    .vault-metal-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 0 20px var(--accent-1);
-      border-color: var(--border-strong);
-    }
-    .vault-metal-name {
-      font-size: 16px;
-      font-weight: 600;
-      color: var(--text-main);
-    }
-    .vault-metal-tagline {
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-    .vault-metal-price {
-      font-size: 13px;
-      color: var(--accent-2);
-      margin-top: auto;
-    }
 
     /* =========================
         NEW: QUICK ACTIONS HUD
@@ -1535,7 +1545,10 @@
       transition: transform 0.5s cubic-bezier(0.5, 0, 1, 0.5), opacity 0.3s 0.2s;
       pointer-events: none;
     }
+    
+    /* REMOVED: Quick Wallet Panel CSS */
 
+    /* REMOVED: Wallet Page CSS */
 
     /* =========================
         RESPONSIVE
@@ -1591,77 +1604,12 @@
         justify-content: flex-end;
       }
       .hud-strip {
+        /* 6-col to 2-col */
         grid-template-columns: repeat(2, minmax(0, 1fr));
         grid-auto-rows: auto;
       }
     }
 
-
-    /* =========================
-        NEW: RIGHT COL: QUICK WALLET
-    ========================== */
-    .quick-wallet-panel-body {
-      padding: 8px 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      flex: 1;
-      overflow-y: auto;
-    }
-    .wallet-asset-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      border-bottom: 1px solid var(--border-soft);
-      padding-bottom: 6px;
-    }
-    .wallet-asset-row:last-child {
-      border-bottom: none;
-    }
-    .wallet-asset-info {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-    .wallet-asset-name {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--accent-2);
-    }
-    [data-theme="holographic"] .wallet-asset-name {
-      color: var(--accent-1);
-    }
-    .wallet-asset-balances {
-      font-size: 11px;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-    .balance-line {
-      display: flex;
-      justify-content: space-between;
-      min-width: 140px;
-      gap: 8px;
-    }
-    .balance-line span:first-child {
-      color: var(--text-muted);
-    }
-    .balance-line span:last-child {
-      color: var(--text-main);
-      font-family: "JetBrains Mono", monospace;
-    }
-    .wallet-asset-actions {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      align-items: flex-end;
-    }
-    .quick-wallet-btn {
-      padding: 3px 8px;
-      font-size: 10px;
-      min-width: 60px;
-      text-align: center;
-    }
   </style>
 </head>
 <body data-theme="night"> <!-- Default theme -->
@@ -1673,25 +1621,35 @@
 
   <!-- APP ROOT -->
   <div id="app-root">
+    
+    <!-- NEW: DEMO MODE BANNER -->
+    <div id="demo-mode-banner">
+      Demo Mode: Trading with simulated funds
+    </div>
+    
     <!-- TOP NAVBAR -->
     <header class="top-nav">
       <div class="nav-logo-area">
-        <div class="nav-logo-orca"></div>
+        <div class="nav-logo-orca">
+          <!-- NEW: SVG Dolphin -->
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M 85.7,35.9 C 75.1,28.2 62.4,30.7 54.7,41.3 C 51.5,45.7 49.3,50.7 48.1,55.9 C 43,49.1 36.5,44.2 28.5,41.7 C 19.3,38.8 9.9,40.1 2.5,46.1 C 1.8,46.6 1.3,47.3 1,48.1 C 0.7,48.9 0.7,49.9 1,50.8 C 2.5,55.5 5.5,59.3 9.4,61.9 C 13.5,64.6 18.2,65.8 22.9,65.2 C 29.5,64.5 35.5,61.4 39.8,56.6 C 40.5,55.7 41,54.7 41.3,53.6 C 41.6,52.5 41.6,51.3 41.3,50.2 C 40.8,48.3 40.1,46.5 39.2,44.8 C 42.1,47.9 44.3,51.5 45.7,55.5 C 46.8,58.7 48,61.7 49.4,64.5 C 50.8,67.3 52.4,69.9 54.3,72.2 C 60.5,79.5 70.3,83.1 80.3,81.3 C 88.5,79.8 95.5,74.5 98.8,66.9 C 100.1,64 100.5,60.9 100,57.9 C 99.5,54.8 98.1,51.9 96.1,49.5 C 92.5,45.2 87.7,42 82.3,40.2 C 86.1,39.3 89.5,37.3 85.7,35.9 Z"/>
+          </svg>
+        </div>
         <div class="nav-logo-text">
           <span class="nav-logo-title">AYNU CEX</span>
           <span class="nav-logo-sub">AMRChain · IonFluid · Digital Metals</span>
         </div>
         <nav class="nav-main-menu">
-          <!-- NEW: data-view attributes for page switching -->
-          <button class="nav-tab" data-view="kyc"><span>home</span></button>
+          <!-- data-view attributes for page switching -->
+          <!-- 'kyc' tab now opens the wallet connection -->
+          <button class="nav-tab" data-view="connect"><span>Connect Wallet</span></button>
           <button class="nav-tab active" data-view="spot"><span>Spot</span></button>
           <button class="nav-tab" data-view="futures"><span>Futures</span></button>
           <button class="nav-tab" data-view="metals"><span>Metals Vault</span></button>
-          <button class="nav-tab" data-view="wallet"><span>Wallet</span></button>
-          <button class="nav-tab" data-view="dex"><span>dex</span></button>
-          <button class="nav-tab" data-view="demo"><span>demo</span></button>
-         
-
+          <!-- REMOVED: Wallet Tab -->
+          <button class="nav-tab" data-view="dex"><span>DEX</span></button>
+          <button class="nav-tab" data-view="demo"><span>Demo</span></button>
         </nav>
       </div>
       <div class="nav-right">
@@ -1700,36 +1658,49 @@
           <span id="status-text">RPC: Disconnected</span>
         </div>
         <span class="nav-wallet-id" id="wallet-label">Wallet: Not linked</span>
-        <button class="btn secondary small" id="btn-open-auth">Login / Register</button>
+        <!-- MODIFIED: Auth button changed to Aynu Wallet -->
+        <button class="btn secondary small" id="btn-connect-wallet">
+          Connect Aynu Wallet
+        </button>
       </div>
     </header>
 
     <!-- =========================
-        PAGE CONTAINER: SPOT
+        PAGE CONTAINER: SPOT & FUTURES (Unified Layout)
     ========================== -->
-    <div class="page-container" id="page-spot">
+    <div class="page-container" id="page-spot"> <!-- This single container handles spot AND futures -->
       <main class="main-layout">
         <!-- HUD STRIP -->
         <section class="hud-strip">
           <div class="hud-block">
-            <span class="hud-label">Pair</span>
+            <span class="hud-label" id="hud-pair-label">Pair</span>
             <span class="hud-value" id="hud-pair">AMR / NVR</span>
           </div>
           <div class="hud-block">
-            <span class="hud-label">Last Price (NVR)</span>
-            <span class="hud-value" id="hud-last">0.00005000</span>
+            <span class="hud-label" id="hud-last-label">Last Price (NVR)</span>
+            <span class="hud-value" id="hud-last">...</span>
           </div>
-          <div class="hud-block">
+          <!-- Spot Only -->
+          <div class="hud-block spot-only">
             <span class="hud-label">24h Change</span>
             <span class="hud-value green" id="hud-change">+0.00%</span>
           </div>
-          <div class="hud-block">
+          <div class="hud-block spot-only">
             <span class="hud-label">24h High</span>
-            <span class="hud-value small" id="hud-high">0.00006000</span>
+            <span class="hud-value small" id="hud-high">...</span>
           </div>
-          <div class="hud-block">
+          <div class="hud-block spot-only">
             <span class="hud-label">24h Low</span>
-            <span class="hud-value small" id="hud-low">0.00004000</span>
+            <span class="hud-value small" id="hud-low">...</span>
+          </div>
+          <!-- Futures Only -->
+          <div class="hud-block futures-only">
+            <span class="hud-label">Open Interest</span>
+            <span class="hud-value small" id="hud-oi">$0.00</span>
+          </div>
+          <div class="hud-block futures-only">
+            <span class="hud-label">Funding / Countdown</span>
+            <span class="hud-value small green" id="hud-funding">+0.001% / 07:55:10</span>
           </div>
         </section>
 
@@ -1752,7 +1723,7 @@
               <div id="asks-body"></div>
             </div>
             <div class="order-mid">
-              <span id="mid-price">0.00005000</span>
+              <span id="mid-price">...</span>
               <span style="font-size:10px;color:var(--text-muted)">NVR</span>
             </div>
             <div class="order-side bids">
@@ -1768,7 +1739,7 @@
         
         <!-- Col 2: Chart, Trade, Positions -->
         <section class="center-column-layout">
-          <!-- NEW: Drawing Toolbar -->
+          <!-- Drawing Toolbar -->
           <div class="chart-drawing-toolbar" id="drawing-toolbar">
             <button class="drawing-tool-btn active" data-tool="crosshair" title="Crosshair">
               <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path></svg>
@@ -1790,11 +1761,7 @@
             </button>
           </div>
 
-          <div class="mode-tabs">
-            <button class="mode-tab active" data-mode="spot">Spot</button>
-            <button class="mode-tab" data-mode="futures">Futures</button>
-            <button class="mode-tab" data-mode="metals">Metals</button>
-          </div>
+          <!-- REMOVED: Mode Tabs -->
           
           <div class="panel chart-panel">
               <div class="chart-toolbar">
@@ -1816,9 +1783,33 @@
                     <button class="chart-mode-btn" data-tf="4h">4h</button>
                     <button class="chart-mode-btn" data-tf="1d">1d</button>
                   </div>
+                  
+                  <!-- NEW: Indicators Button -->
+                  <button class="chart-indicators-btn" id="chart-indicators-btn">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="14" height="14"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4m-1 1v6m-4-6v6m-4-6v6M3 20h18"></path></svg>
+                    Indicators
+                  </button>
+                  
                   <button class="chart-settings-toggle" id="chart-settings-toggle">
                     ⚙ Chart Style
                   </button>
+                  
+                  <!-- NEW: Indicators Popover -->
+                  <div id="indicators-panel">
+                    <label>
+                      <input type="checkbox" id="ind-vol" checked />
+                      Volume
+                    </label>
+                    <label>
+                      <input type="checkbox" id="ind-rsi" />
+                      RSI (coming soon)
+                    </label>
+                    <label>
+                      <input type="checkbox" id="ind-macd" />
+                      MACD (coming soon)
+                    </label>
+                  </div>
+                  
                 </div>
               </div>
               <div class="chart-ohlc-row" id="chart-ohlc-row"></div>
@@ -1852,10 +1843,21 @@
                   </div>
                 </div>
               </div>
+              
+              <!-- NEW: Chart Canvas Layout -->
               <div class="chart-canvas">
-                <div class="chart-grid" id="chart-grid-layer"></div>
-                <div class="chart-line-bg" id="chart-line-bg"></div>
-                <canvas id="price-chart"></canvas>
+                <div class="chart-price-wrapper">
+                  <div class="chart-grid" id="chart-grid-layer"></div>
+                  <div class="chart-line-bg" id="chart-line-bg"></div>
+                  <!-- Main price chart canvas -->
+                  <canvas id="price-chart"></canvas>
+                  <!-- Canvas for drawing orders/positions on top -->
+                  <canvas id="draw-canvas"></canvas>
+                </div>
+                <div class="chart-sub-wrapper">
+                  <!-- NEW: Sub-chart for indicators -->
+                  <canvas id="sub-chart"></canvas>
+                </div>
               </div>
           </div>
 
@@ -1866,11 +1868,43 @@
                 <span class="tag" id="leverage-badge">Cross · 1x</span>
               </div>
             </div>
+            
+            <!-- NEW: Wrapper for Metals Grid -->
+            <div id="metals-wrapper" style="display:none; flex: 1; overflow-y: auto;">
+              <div style="padding:6px 8px 2px 8px;font-size:11px;color:var(--text-muted);">
+                Buy asset-backed digital metals on AMRChain.
+              </div>
+              <div class="metals-grid" id="metals-grid">
+                <!-- Populated by JS -->
+              </div>
+            </div>
+            
+            <!-- NEW: Wrapper for Trade Forms -->
             <div id="trade-forms-wrapper">
               <div class="trade-toggle">
                 <button class="trade-side-btn active buy" data-side="buy">Buy</button>
                 <button class="trade-side-btn sell" data-side="sell">Sell</button>
               </div>
+              
+              <!-- NEW: Leverage Dropdown -->
+              <div class="form-row futures-only" id="leverage-row" style="padding: 4px 8px; position: relative;">
+                <label>Leverage</label>
+                <button type="button" class="leverage-dropdown-btn" id="leverage-dropdown-btn">
+                  <span id="leverage-display">10x</span> <span>▼</span>
+                </button>
+                <div class="leverage-popover" id="leverage-popover">
+                  <div class="leverage-quick-btns">
+                    <button type="button" class="leverage-quick-btn" data-lev="5">5x</button>
+                    <button type="button" class="leverage-quick-btn" data-lev="10">10x</button>
+                    <button type="button" class="leverage-quick-btn" data-lev="20">20x</button>
+                    <button type="button" class="leverage-quick-btn" data-lev="50">50x</button>
+                    <button type="button" class="leverage-quick-btn" data-lev="100">100x</button>
+                  </div>
+                  <label>Custom: <span id="leverage-custom-display">10x</span></label>
+                  <input type="range" id="leverage-slider" min="1" max="100" value="10" style="width: 100%;">
+                </div>
+              </div>
+              
               <form class="trade-form" id="trade-form">
                 <div class="form-row">
                   <label for="order-type">Order Type</label>
@@ -1878,11 +1912,23 @@
                     <select id="order-type">
                       <option value="limit">Limit</option>
                       <option value="market">Market</option>
+                      <option value="stop-limit">Stop Limit</option>
+                      <option value="tp-limit">Take Profit Limit</option>
                     </select>
                     <span class="suffix" id="order-type-label">Spot</span>
                   </div>
                 </div>
-                <div class="form-row">
+                
+                <!-- Stop Price Row -->
+                <div class="form-row hideable" id="stop-price-row">
+                  <label>Stop Price</label>
+                  <div class="input-shell">
+                    <input type="number" id="input-stop-price" step="0.00000001" min="0" />
+                    <span class="suffix" id="stop-price-quote">NVR</span>
+                  </div>
+                </div>
+
+                <div class="form-row" id="limit-price-row">
                   <label>Price</label>
                   <div class="input-shell">
                     <input type="number" id="input-price" step="0.00000001" min="0" />
@@ -1903,6 +1949,23 @@
                     <span class="suffix" id="total-quote">NVR</span>
                   </div>
                 </div>
+
+                <!-- Futures SL/TP Row -->
+                <div class="form-row futures-sl-tp-row" id="futures-sl-tp-row">
+                    <div class="form-row" style="flex:1;">
+                      <label>Take Profit</label>
+                      <div class="input-shell">
+                        <input type="number" id="input-tp" step="0.00000001" min="0" />
+                      </div>
+                    </div>
+                    <div class="form-row" style="flex:1;">
+                      <label>Stop Loss</label>
+                      <div class="input-shell">
+                        <input type="number" id="input-sl" step="0.00000001" min="0" />
+                      </div>
+                    </div>
+                </div>
+
                 <div class="form-row">
                   <label>Balance (Quote)</label>
                   <div class="input-shell">
@@ -1922,16 +1985,11 @@
                   Fee: <span id="fee-rate">0.10%</span> · Est: <span id="fee-estimate">0.00000000</span> NVR
                 </div>
                 <button class="trade-submit-btn" id="btn-submit-order" type="submit">
-                  Login to Trade
+                  Connect Wallet to Trade
                 </button>
               </form>
             </div>
-            <div id="metals-wrapper" style="display:none;">
-              <div style="padding:6px 8px 2px 8px;font-size:11px;color:var(--text-muted);">
-                Buy asset-backed digital metals on AMRChain.
-              </div>
-              <div class="metals-grid" id="metals-grid"></div>
-            </div>
+            
           </div>
 
           <div class="panel positions-panel">
@@ -1957,44 +2015,33 @@
             </div>
           </div>
         </section>
-        <aside class="panel quick-wallet-panel">
-            <div class="panel-header">
-              <span class="panel-title">المحفظة السريعة</span>
-              <div class="panel-actions">
-                <button class="icon-btn" id="btn-refresh-quick-wallet" title="تحديث الأرصدة">⟳</button>
-              </div>
-            </div>
-            <div class="quick-wallet-panel-body" id="quick-wallet-body">
-                            <div class="wallet-asset-row">
-                <div class="wallet-asset-info">
-                  <span class="wallet-asset-name">AMR</span>
-                  <div class="wallet-asset-balances">
-                    <div class="balance-line"><span>المتاح:</span> <span>0.0000</span></div>
-                    <div class="balance-line"><span>في الطلبات:</span> <span>0.0000</span></div>
-                  </div>
-                </div>
-                <div class="wallet-asset-actions">
-                  <button class="btn small secondary quick-wallet-btn">إيداع</button>
-                  <button class="btn small secondary quick-wallet-btn">سحب</button>
-                </div>
-              </div>
-              <div class="wallet-asset-row">
-                <div class="wallet-asset-info">
-                  <span class="wallet-asset-name">NVR</span>
-                  <div class="wallet-asset-balances">
-                    <div class="balance-line"><span>المتاح:</span> <span>0.0000</span></div>
-                    <div class="balance-line"><span>في الطلبات:</span> <span>0.0000</span></div>
-                  </div>
-                </div>
-                <div class="wallet-asset-actions">
-                  <button class="btn small secondary quick-wallet-btn">إيداع</button>
-                  <button class="btn small secondary quick-wallet-btn">سحب</button>
-                </div>
-              </div>
-            </div>
-          </aside>
+
         <!-- Col 3: Markets, Trades -->
         <section class="right-column-layout">
+          <!-- REMOVED: Quick Wallet Panel -->
+          
+          <!-- NEW: Token Info Panel -->
+          <aside class="panel token-info-panel">
+            <div class="panel-header">
+              <span class="panel-title">Token Info</span>
+            </div>
+            <div class="token-info-header" id="token-info-header">
+              <div class="token-info-logo" id="token-info-logo"></div>
+              <div class="token-info-title-wrap">
+                <span class="token-info-title" id="token-info-name">...</span>
+                <span class="token-info-symbol" id="token-info-symbol">...</span>
+              </div>
+            </div>
+            <div class="token-info-body">
+              <p class="token-info-description" id="token-info-desc">
+                Loading token information...
+              </p>
+              <div class="token-info-metrics" id="token-info-metrics">
+                <!-- Metrics loaded by JS -->
+              </div>
+            </div>
+          </aside>
+
           <aside class="panel market-panel">
             <div class="panel-header">
               <span class="panel-title">Markets</span>
@@ -2059,49 +2106,34 @@
     </div> <!-- End #page-spot -->
 
     <!-- =========================
-        PAGE CONTAINER: FUTURES (Placeholder)
-    ========================== -->
-    <div class="page-container" id="page-futures" style="display:none;">
-      <div class="placeholder-page">
-        <div class="placeholder-title">Futures Trading</div>
-        <div class="placeholder-sub">The dedicated layout for futures, perpetuals, and derivatives trading will be built here.</div>
-      </div>
-    </div>
+     PAGE: WALLET (REMOVED)
+    ========================= -->
 
     <!-- =========================
-        PAGE CONTAINER: METALS VAULT (NEW)
+        PAGE CONTAINER: FUTURES (REMOVED - Merged with Spot page)
     ========================== -->
-    <div class="page-container" id="page-metals" style="display:none;">
-      <div class="vault-layout">
-        <!-- Main Hologram Display -->
-        <div class="vault-display">
-          <div class="hologram-object" id="hologram-object">
-            <!-- Cube faces -->
-            <div class="hologram-face front"></div>
-            <div class="hologram-face back"></div>
-            <div class="hologram-face left"></div>
-            <div class="hologram-face right"></div>
-            <div class="hologram-face top"></div>
-            <div class="hologram-face bottom"></div>
-          </div>
-          <div class="hologram-info">
-            <div class="hologram-title" id="hologram-title">Lexirium</div>
-            <div class="hologram-price" id="hologram-price">Price: 500.0 NVR</div>
-          </div>
+
+    <!-- =========================
+        PAGE CONTAINER: METALS VAULT (REMOVED - Merged with Trade Panel)
+    ========================== -->
+
+
+    <!-- NEW: PLACEHOLDER PAGES -->
+    <div class="page-container" id="page-dex" style="display:none;">
+        <div class="placeholder-page">
+            <div class="placeholder-title">Aynu DEX</div>
+            <div class="placeholder-sub">Decentralized Exchange interface coming soon.</div>
         </div>
-        <!-- Grid of Metals to Select -->
-        <div class="vault-grid" id="vault-metals-grid">
-          <!-- Populated by JS -->
-        </div>
-      </div>
     </div>
+    
+    <!-- REMOVED: Demo placeholder, it now uses page-spot -->
 
 
     <!-- =========================
         MODALS & OVERLAYS
     ========================== -->
 
-    <!-- NEW: Quick Actions HUD -->
+    <!-- Quick Actions HUD -->
     <div id="quick-actions-hud">
       <button class="quick-action-btn" id="hud-buy-market">Buy Market</button>
       <button class="quick-action-btn" id="hud-sell-market">Sell Market</button>
@@ -2109,79 +2141,9 @@
       <button class="quick-action-btn" id="hud-draw-line">Draw Line</button>
     </div>
 
-    <!-- AUTH / ZK-KYS MODAL -->
-    <div class="modal-backdrop" id="auth-modal-backdrop">
-      <div class="auth-modal">
-        <div class="auth-header">
-          <div>
-            <div class="auth-title">Zero-Knowledge Access</div>
-            <div class="auth-sub">Local zk-password & zk-KYS demo (no real backend yet)</div>
-          </div>
-          <button class="auth-close" id="btn-auth-close">✕</button>
-        </div>
-        <div class="auth-form">
-          <div class="auth-row">
-            <label for="auth-username">Username</label>
-            <input type="text" id="auth-username" placeholder="trader.nebula" />
-          </div>
-          <div class="auth-row">
-            <label for="auth-password">Password</label>
-            <input type="password" id="auth-password" placeholder="Strong passphrase" />
-          </div>
-          <div class="auth-row">
-            <label for="auth-kys-secret">KYS Secret (ZK-KYS Sim)</label>
-            <input type="password" id="auth-kys-secret" placeholder="Encrypted ID hash" />
-          </div>
-          <div class="auth-row">
-            <label>Local zk-Commit (Preview)</label>
-            <input type="text" id="auth-commit-preview" readonly />
-          </div>
-          <div class="auth-row">
-            <div class="zk-pill">
-              <span class="zk-dot"></span>
-              <span id="zk-status-label">ZK-Password & ZK-KYS: Not generated</span>
-            </div>
-          </div>
-        </div>
-        <div class="auth-actions">
-          <button class="auth-btn secondary" id="btn-generate-zk">Generate ZK Commit</button>
-          <button class="auth-btn" id="btn-login-zk">Login with ZK</button>
-        </div>
-        <div class="auth-footer">
-          This is a UI-only prototype.
-        </div>
-      </div>
-    </div>
+    <!-- REMOVED: ZK-KYC MODAL -->
     
-    <!-- WALLET MODAL -->
-    <div class="modal-backdrop" id="wallet-modal-backdrop">
-      <div class="auth-modal" style="width: 600px;"> <!-- Wider modal -->
-        <div class="auth-header">
-          <div>
-            <div class="auth-title">Wallet Balances</div>
-            <div class="auth-sub">Your assets on Aynu CEX</div>
-          </div>
-          <button class="auth-close" id="btn-wallet-close">✕</button>
-        </div>
-        <div class="panel-actions" style="padding: 8px 0;">
-            <button class="btn secondary small" id="btn-deposit">Deposit (Demo)</button>
-            <button class="btn secondary small" id="btn-withdraw">Withdraw (Demo)</button>
-        </div>
-        <div class="wallet-table-wrapper" style="max-height: 400px;">
-          <table class="wallet-table">
-            <thead>
-              <tr>
-                <th>Asset</th>
-                <th>Total</th>
-                <th>Available</th>
-                <th>In Orders</th>
-              </tr>
-            </thead>
-            <tbody id="wallet-modal-body"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
+    <!-- REMOVED: WALLET MODAL -->
 
 
     <!-- TOASTS -->
@@ -2189,24 +2151,70 @@
 
   <script>
     // ==============================
+    // NEW: API BASE URL
+    // ==============================
+    const API_BASE_URL = "https://price.orcaamr.com";
+    
+    // ==============================
     // BASIC STATE
     // ==============================
     const state = {
       connected: false,
-      wallet: null,
-      mode: "spot",     // "spot" | "futures" | "metals"
-      view: "spot",    // "spot" | "futures" | "metals"
+      wallet: null, // Will be like 'amr-galaxy-...'
+      mode: "spot",     // "spot" | "futures" | "metals" | "demo"
+      view: "spot",    // "spot" | "futures" | "metals" | "demo" | "dex"
       markets: [],
-      walletAssets: [],
+      walletAssets: [], // Still needed for balance checks
       orderbook: { bids: [], asks: [] },
-      trades: [],
+      trades: [], // This will be populated by /cex/trades
       positions: [],
       openOrders: [],
       metals: [],
       feeRate: 0.001, // 0.1%
-      zkCommit: null,
       selectedMarket: null,
       selectedHologram: null, // For metals vault
+    };
+    
+    // ==============================
+    // NEW: TOKEN INFO MOCK DATA
+    // ==============================
+    const tokenInfoData = {
+        "AMR": {
+            name: "AMRChain",
+            symbol: "AMR",
+            description: "AMRChain is the native L1 token for the Aynu ecosystem, powering transactions, governance, and staking across the network.",
+            logo: "var(--accent-1)",
+            metrics: {
+                "Market Cap": "$150,000,000",
+                "TVL": "$45,000,000",
+                "All-Time High": "$1.50",
+                "All-Time Low": "$0.002",
+            }
+        },
+        "NVR": {
+            name: "Novera",
+            symbol: "NVR",
+            description: "Novera is the native stablecoin of the AMRChain ecosystem, designed to maintain a stable peg for seamless trading and payments.",
+            logo: "var(--accent-3)",
+            metrics: {
+                "Market Cap": "$80,000,000",
+                "TVL": "N/A",
+                "All-Time High": "$1.02",
+                "All-Time Low": "$0.98",
+            }
+        },
+        "IONX": {
+            name: "IonFluid",
+            symbol: "IONX",
+            description: "IonFluid is the gas token of the AMRChain network, used to pay for computational fees and facilitate network operations.",
+            logo: "var(--accent-2)",
+            metrics: {
+                "Market Cap": "$30,000,000",
+                "TVL": "N/A",
+                "All-Time High": "$0.10",
+                "All-Time Low": "$0.01",
+            }
+        }
     };
 
     // ==============================
@@ -2220,13 +2228,24 @@
       showGrid: true,
       showWicks: true,
       theme: "night", // Default theme
-      candles: [],
+      candles: [], // This will be built from state.trades
+      // Price range
       minPrice: 0,
       maxPrice: 0,
+      // Time range
+      minTs: 0,
+      maxTs: 0,
+      // Interaction state
       isDragging: false,
       lastDragY: 0,
       yAxisWidth: 60,
       currentTool: 'crosshair', // For drawing tools
+      // NEW: Indicators state
+      indicators: {
+        volume: true,
+        rsi: false,
+        macd: false
+      }
     };
 
     // ==============================
@@ -2263,31 +2282,31 @@
     }
 
     // ==============================
-    // MOCK DATA INIT
+    // MOCK DATA (Only for Metals/Wallet Demo)
     // ==============================
     function initMockData() {
-      state.markets = [
-        { pair: "AMR/NVR", last: 0.000050, change: 0.0, vol: 123456, base: "AMR", quote: "NVR", group: "amr" },
-        { pair: "AMR/IONX", last: 0.020100, change: +2.3, vol: 9876, base: "AMR", quote: "IONX", group: "amr" },
-        { pair: "NVR/IONX", last: 0.500000, change: -1.4, vol: 5123, base: "NVR", quote: "IONX", group: "nvr" },
-        { pair: "IONX/USDT", last: 75.000000, change: +6.1, vol: 300, base: "IONX", quote: "USDT", group: "ionx" },
-        { pair: "AMR/USDT", last: 0.000051, change: +0.5, vol: 888888, base: "AMR", quote: "USDT", group: "amr" }
-      ];
-      state.selectedMarket = state.markets[0];
+      // Markets are now fetched live
+      
+      // NEW: Demo mode check for wallet balances
+      if (state.mode === 'demo') {
+        state.walletAssets = [
+          { asset: "AMR", total: 10000, available: 10000, inOrders: 0 },
+          { asset: "NVR", total: 100000, available: 100000, inOrders: 0 },
+          { asset: "IONX", total: 50000, available: 50000, inOrders: 0 }
+        ];
+        logActivity("Demo Mode: Loaded simulated funds.");
+      } else {
+         state.walletAssets = [
+          { asset: "AMR", total: 1000, available: 800, inOrders: 200 },
+          { asset: "NVR", total: 5000, available: 3000, inOrders: 2000 },
+          { asset: "IONX", total: 120, available: 80, inOrders: 40 }
+        ];
+      }
 
-      state.walletAssets = [
-        { asset: "AMR", total: 100000, available: 80000, inOrders: 20000 },
-        { asset: "NVR", total: 5000, available: 3000, inOrders: 2000 },
-        { asset: "IONX", total: 120, available: 80, inOrders: 40 },
-        { asset: "USDT", total: 10000, available: 10000, inOrders: 0 }
-      ];
-      state.positions = [
-        { pair: "AMR/NVR", side: "long", size: 25000, entry: 0.000048, pnl: +12.5 },
-        { pair: "IONX/USDT", side: "short", size: 10, entry: 80.0, pnl: -56.0 }
-      ];
-      state.openOrders = [
-        { pair: "AMR/NVR", side: "buy", amount: 20000, price: 0.000045, total: 0.9 }
-      ];
+      // Positions and orders will be added by the user
+      state.positions = [];
+      state.openOrders = [];
+
       state.metals = [
         { id: "LEX", name: "Lexirium", price: 500.0, desc: "High-density digital metal", tags: ["Core Reserve", "High Cov."], apy: "—", color1: "#7b5bff", color2: "#37c5ff" },
         { id: "CRY", name: "Crystal Shards", price: 50000.0, desc: "Ultra rare crystal layer", tags: ["Ultra Rare", "Illiquid"], apy: "—", color1: "#ff00ff", color2: "#ffffff" },
@@ -2296,95 +2315,274 @@
       ];
       state.selectedHologram = state.metals[0];
 
-      generateMockOrderbook();
-      generateMockTrades();
-      initChartData();
+      // We no longer generate mock trades or orderbooks
+      // We will initialize the chart AFTER fetching real data
     }
 
-    function generateMockOrderbook() {
-      const mid = state.selectedMarket?.last || 0.000050;
-      const num = 14;
-      const asks = [];
-      const bids = [];
-      for (let i = 1; i <= num; i++) {
-        const askPrice = mid + i * (mid * 0.0001);
-        const bidPrice = mid - i * (mid * 0.0001);
-        const askAmount = 2000 + Math.random() * 8000;
-        const bidAmount = 2000 + Math.random() * 8000;
-        asks.push({ price: askPrice, amount: askAmount, total: askPrice * askAmount });
-        bids.push({ price: bidPrice, amount: bidAmount, total: bidPrice * bidAmount });
+
+    // ==============================
+    // LIVE CEX DATA (REST via Go Node)
+    // ==============================
+    let cexPollTimer = null;
+
+    function initLiveData() {
+      // Available markets (static, but prices from /cex/best)
+      state.markets = [
+        { pair: "AMR/NVR",  last: 0, change: 0.0, vol: 0, base: "AMR", quote: "NVR", group: "amr" },
+        { pair: "AMR/IONX", last: 0, change: 0.0, vol: 0, base: "AMR", quote: "IONX", group: "amr" },
+        { pair: "NVR/IONX", last: 0, change: 0.0, vol: 0, base: "NVR", quote: "IONX", group: "nvr" }
+      ];
+      state.selectedMarket = state.markets[0];
+
+      // Demo wallets
+      initMockData(); // This loads walletAssets and metals
+      
+      state.orderbook = { bids: [], asks: [] };
+      state.trades = []; // Start with empty trades
+
+      // First render (will show "no data" for chart)
+      renderAll();
+      renderTokenInfo(state.selectedMarket); // Render info for default market
+
+      // Start real polling from /cex/*
+      startCexPolling();
+    }
+
+    async function fetchBestForCurrent() {
+      const m = state.selectedMarket;
+      if (!m) return;
+      try {
+        const res = await fetch(`${API_BASE_URL}/cex/best?pair=${encodeURIComponent(m.pair)}`);
+        if (!res.ok) return;
+        const data = await res.json(); // {bid, ask}
+        if (typeof data.bid === "number" && typeof data.ask === "number") {
+          const old = m.last || ((data.bid + data.ask) / 2);
+          const mid = (data.bid + data.ask) / 2;
+          m.last = mid;
+          if (old > 0) {
+            const diff = mid - old;
+            const pct = (diff / old) * 100;
+            // Accumulate change simply
+            m.change += pct;
+          }
+          
+          // Update 24h high/low (mocked from mid)
+          qs("#hud-high").textContent = (mid * 1.02).toFixed(8); // Mock
+          qs("#hud-low").textContent = (mid * 0.98).toFixed(8); // Mock
+        }
+      } catch (e) {
+        console.error("fetchBestForCurrent failed", e);
       }
-      state.orderbook.asks = asks;
-      state.orderbook.bids = bids;
     }
 
-    function generateMockTrades() {
-      const now = Date.now();
-      const mid = state.selectedMarket?.last || 0.000050;
-      state.trades = [];
-      for (let i = 0; i < 40; i++) {
-        const side = Math.random() > 0.5 ? "buy" : "sell";
-        const price = mid + (Math.random() - 0.5) * (mid * 0.01);
-        const amount = 1000 + Math.random() * 5000;
-        state.trades.push({
-          side,
-          price,
-          amount,
-          ts: now - i * 60000
+    async function fetchDepthForCurrent() {
+      const m = state.selectedMarket;
+      if (!m) return;
+      try {
+        const res = await fetch(`${API_BASE_URL}/cex/depth?pair=${encodeURIComponent(m.pair)}`);
+        if (!res.ok) return;
+        const data = await res.json();
+        // C++ depth_to_json: {buys:[{price,qty},...], sells:[{price,qty},...], timestamp:...}
+        const asks = (data.sells || []).map(level => ({
+          price: Number(level.price),
+          amount: Number(level.qty),
+          total: Number(level.price) * Number(level.qty)
+        }));
+        const bids = (data.buys || []).map(level => ({
+          price: Number(level.price),
+          amount: Number(level.qty),
+          total: Number(level.price) * Number(level.qty)
+        }));
+        state.orderbook.asks = asks;
+        state.orderbook.bids = bids;
+      } catch (e) {
+        console.error("fetchDepthForCurrent failed", e);
+      }
+    }
+
+    let lastTradePrice = null;
+    async function fetchTradesForCurrent() {
+      const m = state.selectedMarket;
+      if (!m) return;
+      try {
+        const res = await fetch(`${API_BASE_URL}/cex/trades?pair=${encodeURIComponent(m.pair)}`);
+        if (!res.ok) return;
+        const data = await res.json();
+        const raw = data.trades || [];
+        const mapped = [];
+        
+        // C++: { id, side, price, quantity, timestamp }
+        raw.forEach(t => {
+          const price = parseFloat(t.price);
+          const amount = parseFloat(t.quantity || t.amount || 0);
+          mapped.push({
+            price,
+            amount,
+            ts: parseInt(t.ts || t.timestamp || Date.now()),
+            side: t.side, // 'buy' or 'sell'
+            id: t.id || t.trade_id || ""
+          });
         });
+        
+        // Store trades, sorted by time (oldest first for candle building)
+        mapped.sort((a, b) => a.ts - b.ts);
+        state.trades = mapped;
+        
+        // Update lastTradePrice for UI display
+        if (state.trades.length > 0) {
+            lastTradePrice = state.trades[state.trades.length - 1].price;
+        }
+
+      } catch (e) {
+        console.error("fetchTradesForCurrent failed", e);
       }
+    }
+
+    async function fetchCexSnapshot() {
+      if (!state.selectedMarket) return;
+      try {
+        await Promise.all([
+          fetchBestForCurrent(),
+          fetchDepthForCurrent(),
+          fetchTradesForCurrent(), // This now populates state.trades
+        ]);
+
+        // Update chart data AFTER fetching trades
+        initChartData();
+
+        // Then render everything
+        renderAll();
+      } catch (err) {
+        console.error("[CEX Live] fetchCexSnapshot error", err);
+      }
+    }
+
+    function startCexPolling() {
+      if (cexPollTimer) clearInterval(cexPollTimer);
+      // First load
+      fetchCexSnapshot();
+      // Then every 3 seconds
+      cexPollTimer = setInterval(fetchCexSnapshot, 3000);
     }
 
     // ==============================
     // CHART DATA (CANDLES)
     // ==============================
-    function initChartData() {
-      const basePrice = state.selectedMarket?.last || 0.00005;
-      chartState.candles = buildRandomCandles(basePrice, 80, chartState.timeFrame);
 
+    /**
+     * Build Candles from Real Trades
+     * @param {Array} trades - The state.trades array
+     * @param {String} timeframeStr - e.g., "1m", "15m"
+     * @param {Number} maxCandles - Max number of candles to return
+     */
+    function buildCandlesFromTrades(trades, timeframeStr, maxCandles = 80) {
+      let minutes = 1;
+      switch (timeframeStr) {
+        case "15m": minutes = 15; break;
+        case "1h":  minutes = 60; break;
+        case "4h":  minutes = 240; break;
+        case "1d":  minutes = 1440; break;
+        case "1m":
+        default:    minutes = 1; break;
+      }
+      const tfMs = minutes * 60 * 1000;
+
+      const buckets = new Map();
+
+      (trades || []).forEach(tr => {
+        const ts = tr.ts || Date.now();
+        const price = tr.price;
+        const vol   = tr.amount || 0;
+
+        if (!price || isNaN(price) || price <= 0) return;
+
+        // Find the start time of the bucket this trade belongs to
+        const bucketTs = Math.floor(ts / tfMs) * tfMs;
+
+        let c = buckets.get(bucketTs);
+        if (!c) {
+          // New bucket, create new candle
+          c = {
+            time:   bucketTs, // Use 'time' to match old 'buildRandomCandles'
+            open:   price,
+            high:   price,
+            low:    price,
+            close:  price,
+            volume: 0,
+          };
+          buckets.set(bucketTs, c);
+        } else {
+          // Update existing candle
+          if (price > c.high) c.high = price;
+          if (price < c.low)  c.low  = price;
+          c.close = price; // Always update close to the latest trade in bucket
+        }
+        c.volume += vol;
+      });
+
+      // Convert map to array and sort by time
+      let arr = Array.from(buckets.values()).sort((a, b) => a.time - b.time);
+
+      // Enforce maxCandles limit
+      if (maxCandles && arr.length > maxCandles) {
+        arr = arr.slice(arr.length - maxCandles);
+      }
+      return arr;
+    }
+
+    /**
+     * MODIFIED: initChartData now uses real trades
+     */
+    function initChartData() {
+      const tf = chartState.timeFrame || "1m";
+
+      // Build candles from state.trades
+      chartState.candles = buildCandlesFromTrades(state.trades, tf, 80);
+
+      // If no trades yet, set a default range around the last price
+      if (!chartState.candles || chartState.candles.length === 0) {
+        const basePrice =
+          (state.selectedMarket && state.selectedMarket.last) ||
+          (lastTradePrice) ||
+           0.00005;
+
+        chartState.minPrice = basePrice * 0.95;
+        chartState.maxPrice = basePrice * 1.05;
+        const now = Date.now();
+        // Set a default time range (e.g., last 80 minutes for 1m tf)
+        let tfMs = 60 * 1000;
+        try {
+            const unit = tf.slice(-1);
+            const val = parseInt(tf.slice(0, -1));
+            if (unit === 'm') tfMs = val * 60 * 1000;
+            if (unit === 'h') tfMs = val * 60 * 60 * 1000;
+            if (unit === 'd') tfMs = val * 24 * 60 * 60 * 1000;
+        } catch(e) {}
+        chartState.minTs = now - 80 * tfMs;
+        chartState.maxTs = now;
+        return;
+      }
+
+      // Calculate price and time range from the real candles
       const prices = chartState.candles.flatMap(c => [c.high, c.low]);
       let minP = Math.min(...prices);
       let maxP = Math.max(...prices);
+      
       if (!isFinite(minP) || !isFinite(maxP) || minP === maxP) {
+        const basePrice =
+          (state.selectedMarket && state.selectedMarket.last) || 
+          (lastTradePrice) || 
+          0.00005;
         minP = basePrice * 0.95;
         maxP = basePrice * 1.05;
       }
-      const padding = (maxP - minP) * 0.1;
+
+      const padding = (maxP - minP) * 0.1 || minP * 0.05;
       chartState.minPrice = minP - padding;
       chartState.maxPrice = maxP + padding;
-    }
 
-    function buildRandomCandles(startPrice, count, tf) {
-      const candles = [];
-      let lastClose = startPrice;
-      const now = Date.now();
-      let tfMs;
-      switch (tf) {
-        case "1m":  tfMs = 60 * 1000; break;
-        case "15m": tfMs = 15 * 60 * 1000; break;
-        case "1h":  tfMs = 60 * 60 * 1000; break;
-        case "4h":  tfMs = 4 * 60 * 60 * 1000; break;
-        case "1d":  tfMs = 24 * 60 * 60 * 1000; break;
-        default:    tfMs = 60 * 1000;
-      }
-      for (let i = count - 1; i >= 0; i--) {
-        const t = now - i * tfMs;
-        const volFactor =
-          tf === "1m"  ? 0.005 :
-          tf === "15m" ? 0.01 :
-          tf === "1h"  ? 0.02 :
-          tf === "4h"  ? 0.05 :
-                         0.1;
-        const drift = (Math.random() - 0.5) * (startPrice * volFactor);
-        const open = lastClose;
-        let close = open + drift;
-        if (close <= 0) close = open * 0.999;
-        const high = Math.max(open, close) + Math.abs(drift) * (0.4 + Math.random() * 0.6);
-        const low  = Math.min(open, close) - Math.abs(drift) * (0.4 + Math.random() * 0.6);
-        candles.push({ time: t, open, high, low, close });
-        lastClose = close;
-      }
-      return candles;
+      chartState.minTs = chartState.candles[0].time;
+      chartState.maxTs = chartState.candles[chartState.candles.length - 1].time;
     }
 
     // ==============================
@@ -2394,23 +2592,19 @@
       if (!state.selectedMarket) return;
       
       // Render components based on the active page
-      if (state.view === 'spot') {
+      if (state.view === 'spot' || state.view === 'futures' || state.view === 'metals' || state.view === 'demo') {
         renderMarkets();
         renderHud(state.selectedMarket);
         renderOrderbook();
-        renderTrades();
+        renderTrades(); // Uses real state.trades
         renderActiveOrdersAndPositions();
         
         updateTradeFormUI(); 
-        renderChart();
-      } else if (state.view === 'futures') {
-        // Render futures components (currently placeholder)
-      } else if (state.view === 'metals') {
-        renderMetalsVault();
+        renderChart(); // Uses real chartState.candles
+        renderTokenInfo(state.selectedMarket); // Render token info
       }
       
-      // Always render wallet (for modal)
-      renderWallet();
+      // REMOVED: renderWallet() call
     }
 
     function updateTradeFormUI() {
@@ -2423,28 +2617,97 @@
 
       const base = m.base;
       const quote = m.quote;
-      // Mode (spot/futures) is now state, not just a tab
-      const modeTitle = state.mode.charAt(0).toUpperCase() + state.mode.slice(1);
-
+      const isFutures = state.mode === 'futures';
+      const isMetals = state.mode === 'metals'; // NEW: Metals check
+      const modeTitle = isFutures ? "Futures" : (isMetals ? "Metals Vault" : "Spot");
+      const orderType = qs("#order-type").value;
+      
+      // NEW: Show/hide trade form vs metals grid
+      qs("#trade-forms-wrapper").style.display = isMetals ? "none" : "block";
+      qs("#metals-wrapper").style.display = isMetals ? "block" : "none";
+      
+      if (isMetals) {
+        tradePanelTitle.textContent = "Digital Metals Vault";
+        renderMetalsGrid(); // NEW: Populate metals grid
+        return; // Don't need to update the rest of the form
+      }
+      
+      // Update titles and labels
       tradePanelTitle.textContent = `${modeTitle} Trade – ${m.pair}`;
       qs("#price-quote").textContent = quote;
       qs("#amount-base").textContent = base;
       qs("#total-quote").textContent = quote;
       qs("#balance-quote-symbol").textContent = quote;
+      qs("#stop-price-quote").textContent = quote;
+      qs("#orderbook-title").textContent = `${modeTitle} Orderbook`;
+      
+      const buyBtn = qs(".trade-side-btn[data-side='buy']");
+      const sellBtn = qs(".trade-side-btn[data-side='sell']");
+      if(buyBtn) buyBtn.textContent = isFutures ? "Long" : "Buy";
+      if(sellBtn) sellBtn.textContent = isFutures ? "Short" : "Sell";
 
       const quoteWallet = state.walletAssets.find(a => a.asset === quote);
       qs("#balance-quote").value = quoteWallet ? quoteWallet.available.toFixed(8) : "0.00000000";
-      qs("#orderbook-title").textContent = `${modeTitle} Orderbook`;
-      qs("#leverage-badge").textContent = state.mode === "spot" ? "Cross · 1x" : "Isolated · 10x (demo)";
+      
+      // Show/hide form rows based on mode and order type
+      const isStop = orderType === 'stop-limit' || orderType === 'tp-limit';
+      const isMarket = orderType === 'market';
+
+      qs("#stop-price-row").style.display = isStop ? 'flex' : 'none';
+      qs("#limit-price-row").style.display = isMarket ? 'none' : 'flex';
+      qs("#input-price").disabled = isMarket;
+      
+      // Show/hide Futures-specific elements
+      qsa(".futures-only").forEach(el => el.style.display = isFutures ? 'flex' : 'none');
+      qsa(".spot-only").forEach(el => el.style.display = isFutures ? 'none' : 'flex');
+      qs("#leverage-badge").style.display = isFutures ? 'inline-flex' : 'none';
+      
+      // NEW: Update both leverage displays
+      const currentLev = qs("#leverage-slider")?.value || 10;
+      qs("#leverage-badge").textContent = isFutures ? `Isolated · ${currentLev}x` : "Spot";
+      qs("#leverage-display").textContent = `${currentLev}x`;
+      
       qs("#order-type-label").textContent = state.mode === "spot" ? "Spot" : "Futures";
 
       // Update submit button text based on login state
       const submitBtn = qs("#btn-submit-order");
       if (state.connected) {
-        submitBtn.textContent = getOrderSide() === 'buy' ? "Place Buy Order" : "Place Sell Order";
+        const side = getOrderSide();
+        if (isFutures) {
+            submitBtn.textContent = side === 'buy' ? "Open Long" : "Open Short";
+        } else {
+            submitBtn.textContent = side === 'buy' ? "Place Buy Order" : "Place Sell Order";
+        }
       } else {
-        submitBtn.textContent = "Login to Trade";
+        submitBtn.textContent = "Connect Wallet to Trade";
       }
+    }
+    
+    // NEW: Render Metals Grid
+    function renderMetalsGrid() {
+      const grid = qs("#metals-grid");
+      if (!grid) return;
+      grid.innerHTML = "";
+      state.metals.forEach(metal => {
+        const card = document.createElement("div");
+        card.className = "metal-card";
+        card.innerHTML = `
+          <div class="metal-name">${metal.name}</div>
+          <div class="metal-tagline">${metal.desc}</div>
+          <div class="metal-price">${metal.price.toFixed(2)} NVR</div>
+          <div class="metal-badge-row">
+            ${metal.tags.map(tag => `<span class="metal-badge">${tag}</span>`).join('')}
+          </div>
+          <div class="metal-footer-row">
+            <button class="btn-metal-buy" data-id="${metal.id}">Buy</button>
+          </div>
+        `;
+        card.querySelector('.btn-metal-buy').addEventListener('click', (e) => {
+          e.stopPropagation();
+          showToast("Metals Vault", `Buying ${metal.name} (demo)...`, "info");
+        });
+        grid.appendChild(card);
+      });
     }
 
     // ==============================
@@ -2468,7 +2731,7 @@
           const tr = document.createElement("tr");
           tr.innerHTML = `
             <td>${m.pair}</td>
-            <td>${m.last.toFixed(8)}</td>
+            <td>${m.last > 0 ? m.last.toFixed(8) : '...'}</td>
             <td class="${m.change > 0 ? "change-up" : m.change < 0 ? "change-down" : ""}">
               ${m.change >= 0 ? "+" : ""}${m.change.toFixed(2)}%
             </td>
@@ -2482,14 +2745,30 @@
     function renderHud(pairObj) {
       const m = pairObj || state.markets[0];
       if (!m) return;
+      const isFutures = state.mode === 'futures';
+      
+      // Show/hide HUD blocks
+      qsa(".hud-block.spot-only").forEach(el => el.style.display = isFutures ? 'none' : 'flex');
+      qsa(".hud-block.futures-only").forEach(el => el.style.display = isFutures ? 'flex' : 'none');
+
+      // Update labels
+      qs("#hud-pair-label").textContent = isFutures ? "Perpetual Pair" : (state.mode === 'demo' ? "Demo Pair" : "Pair");
+      qs("#hud-last-label").textContent = isFutures ? "Mark Price (NVR)" : "Last Price (NVR)";
+      
+      // Update values
       qs("#hud-pair").textContent = m.pair;
-      qs("#hud-last").textContent = m.last.toFixed(8);
-      const changeEl = qs("#hud-change");
-      changeEl.textContent = (m.change >= 0 ? "+" : "") + m.change.toFixed(2) + "%";
-      changeEl.classList.toggle("green", m.change >= 0);
-      changeEl.classList.toggle("red", m.change < 0);
-      qs("#hud-high").textContent = (m.last * 1.02).toFixed(8); // Mock
-      qs("#hud-low").textContent = (m.last * 0.98).toFixed(8); // Mock
+      qs("#hud-last").textContent = m.last > 0 ? m.last.toFixed(8) : '...';
+      
+      if(!isFutures) {
+        const changeEl = qs("#hud-change");
+        changeEl.textContent = (m.change >= 0 ? "+" : "") + m.change.toFixed(2) + "%";
+        changeEl.classList.toggle("green", m.change >= 0);
+        changeEl.classList.toggle("red", m.change < 0);
+      } else {
+        // Mock futures data
+        qs("#hud-oi").textContent = `$${(m.vol * m.last * 20).toLocaleString('en-US', {maximumFractionDigits: 0})}`; // Mock OI
+        // Mock funding rate logic here if needed
+      }
     }
 
     function renderOrderbook() {
@@ -2498,12 +2777,14 @@
       if (!asksBox || !bidsBox) return;
       asksBox.innerHTML = "";
       bidsBox.innerHTML = "";
-      const asks = [...state.orderbook.asks].sort((a, b) => a.price - b.price);
-      const bids = [...state.orderbook.bids].sort((a, b) => b.price - a.price);
-      const maxAskTotal = Math.max(...asks.map(a => a.total), 1);
-      const maxBidTotal = Math.max(...bids.map(b => b.total), 1);
+      
+      const asks = [...state.orderbook.asks].sort((a, b) => a.price - b.price).slice(0, 14); // Limit
+      const bids = [...state.orderbook.bids].sort((a, b) => b.price - a.price).slice(0, 14); // Limit
+      
+      const maxAskTotal = Math.max(...asks.map(a => a.total), 0);
+      const maxBidTotal = Math.max(...bids.map(b => b.total), 0);
 
-      asks.forEach(row => {
+      asks.reverse().forEach(row => { // Reverse for display (lowest ask at bottom)
         const el = document.createElement("div");
         el.className = "order-row ask";
         const depth = (row.total / maxAskTotal) * 100;
@@ -2529,17 +2810,17 @@
         bidsBox.appendChild(el);
       });
 
-      const bestAsk = asks[0]?.price || 0;
+      const bestAsk = asks[asks.length - 1]?.price || 0; // Last after reverse
       const bestBid = bids[0]?.price || 0;
       const mid = bestAsk && bestBid ? (bestAsk + bestBid) / 2 : (state.selectedMarket?.last || 0);
-      qs("#mid-price").textContent = mid.toFixed(8);
+      qs("#mid-price").textContent = mid > 0 ? mid.toFixed(8) : '...';
     }
 
     function renderTrades() {
       const tbody = qs("#trades-body");
       if (!tbody) return;
       tbody.innerHTML = "";
-      state.trades.forEach(t => {
+      [...state.trades].reverse().slice(0, 40).forEach(t => {
         const tr = document.createElement("tr");
         const timeStr = new Date(t.ts).toLocaleTimeString("en-US", { hour12: false });
         tr.innerHTML = `
@@ -2552,21 +2833,7 @@
       });
     }
 
-    function renderWallet() {
-      const tbody = qs("#wallet-modal-body");
-      if (!tbody) return;
-      tbody.innerHTML = "";
-      state.walletAssets.forEach(a => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${a.asset}</td>
-          <td>${a.total.toFixed(8)}</td>
-          <td>${a.available.toFixed(8)}</td>
-          <td>${a.inOrders.toFixed(8)}</td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
+    // REMOVED: renderWallet() function
 
     function renderActiveOrdersAndPositions() {
       const tbody = qs("#active-tbody");
@@ -2574,39 +2841,50 @@
       const title = qs("#active-panel-title");
       if (!tbody || !thead || !title) return;
       tbody.innerHTML = "";
+      
+      const titleSuffix = state.mode === 'demo' ? " (Demo)" : (state.mode === 'futures' ? " (Futures)" : " (Spot)");
 
-      if (state.mode === 'futures') {
-        title.textContent = "Open Positions (Futures)";
+      if (state.mode === 'futures' || (state.mode === 'demo' && state.positions.length > 0)) {
+        title.textContent = "Open Positions" + titleSuffix;
         thead.innerHTML = `
           <tr>
             <th>Pair</th>
             <th>Side</th>
             <th>Size</th>
             <th>Entry</th>
+            <th>Mark</th>
             <th>PnL</th>
+            <th>SL/TP</th>
           </tr>
         `;
         state.positions.forEach(p => {
           const tr = document.createElement("tr");
-          const pnlClass = p.pnl >= 0 ? "buy-text" : "sell-text";
+          const markPrice = state.selectedMarket.last;
+          const pnlValue = (markPrice - p.entry) * p.size * (p.side === 'long' ? 1 : -1);
+          const pnlPct = (pnlValue / (p.entry * p.size)) * 100 * p.leverage; // Simplified PnL %
+          
+          const pnlClass = pnlValue >= 0 ? "buy-text" : "sell-text";
           tr.innerHTML = `
             <td>${p.pair}</td>
             <td><span class="tag ${p.side}">${p.side.toUpperCase()}</span></td>
             <td>${p.size.toFixed(2)}</td>
             <td>${p.entry.toFixed(8)}</td>
-            <td class="${pnlClass}">${p.pnl.toFixed(2)}%</td>
+            <td>${markPrice.toFixed(8)}</td>
+            <td class="${pnlClass}">${pnlValue.toFixed(4)} (${pnlPct.toFixed(2)}%)</td>
+            <td>${p.tp || '–'} / ${p.sl || '–'}</td>
           `;
           tbody.appendChild(tr);
         });
       } else {
-        // Render Spot Orders
-        title.textContent = "Open Orders (Spot)";
+        // Render Spot/Demo Orders
+        title.textContent = "Open Orders" + titleSuffix;
         thead.innerHTML = `
           <tr>
             <th>Pair</th>
             <th>Side</th>
             <th>Amount</th>
             <th>Price</th>
+            <th>Stop Price</th>
             <th>Total</th>
           </tr>
         `;
@@ -2618,6 +2896,7 @@
             <td class="${sideClass}">${o.side.toUpperCase()}</td>
             <td>${o.amount.toFixed(2)}</td>
             <td>${o.price.toFixed(8)}</td>
+            <td>${o.stopPrice ? o.stopPrice.toFixed(8) : 'N/A'}</td>
             <td>${o.total.toFixed(8)}</td>
           `;
           tbody.appendChild(tr);
@@ -2625,89 +2904,43 @@
       }
     }
 
-function renderQuickWallet() {
-      const body = qs("#quick-wallet-body");
-      if (!body) return; // ليتم العرض فقط في صفحة spot
+    // REMOVED: renderQuickWallet()
 
-      const m = state.selectedMarket;
-      if (!m) {
-        body.innerHTML = `<span style="color:var(--text-muted);font-size:11px;">الرجاء اختيار سوق...</span>`;
-        return;
-      }
+    // NEW: Render Token Info Panel
+    function renderTokenInfo(market) {
+        if (!market) return;
+        const info = tokenInfoData[market.base]; // Get info for the BASE currency
+        if (!info) {
+            // Clear panel if no info
+            qs("#token-info-name").textContent = market.base;
+            qs("#token-info-symbol").textContent = "No data";
+            qs("#token-info-logo").style.background = "#333";
+            qs("#token-info-desc").textContent = "No information available for this token.";
+            qs("#token-info-metrics").innerHTML = "";
+            return;
+        }
 
-      const base = state.walletAssets.find(a => a.asset === m.base);
-      const quote = state.walletAssets.find(a => a.asset === m.quote);
-
-      const assetsToRender = [
-        { symbol: m.base, data: base },
-        { symbol: m.quote, data: quote }
-      ];
-
-      body.innerHTML = ""; // مسح المحتوى القديم
-
-      assetsToRender.forEach(asset => {
-        const available = asset.data ? asset.data.available.toFixed(8) : "0.00000000";
-        const inOrders = asset.data ? asset.data.inOrders.toFixed(8) : "0.00000000";
-        
-        const row = document.createElement("div");
-        row.className = "wallet-asset-row";
-        row.innerHTML = `
-          <div class="wallet-asset-info">
-            <span class="wallet-asset-name">${asset.symbol}</span>
-            <div class="wallet-asset-balances">
-              <div class="balance-line"><span>المتاح:</span> <span>${available}</span></div>
-              <div class="balance-line"><span>في الطلبات:</span> <span>${inOrders}</span></div>
-            </div>
-          </div>
-          <div class="wallet-asset-actions">
-            <button class="btn small secondary quick-wallet-btn" data-action="deposit" data-asset="${asset.symbol}">إيداع</button>
-            <button class="btn small secondary quick-wallet-btn" data-action="withdraw" data-asset="${asset.symbol}">سحب</button>
-          </div>
-        `;
-        body.appendChild(row);
-      });
-    }
-    function renderMetalsVault() {
-      const grid = qs("#vault-metals-grid");
-      if (!grid) return;
-      grid.innerHTML = "";
-      
-      // Render Grid
-      state.metals.forEach(m => {
-        const card = document.createElement("div");
-        card.className = "vault-metal-card";
-        card.innerHTML = `
-          <div class="vault-metal-name">${m.name}</div>
-          <div class="vault-metal-tagline">${m.desc}</div>
-          <div class="vault-metal-price">Price: ${m.price.toLocaleString()} NVR</div>
-        `;
-        card.addEventListener("click", () => {
-          state.selectedHologram = m;
-          renderHologram();
-        });
-        grid.appendChild(card);
-      });
-
-      // Render Hologram
-      renderHologram();
-    }
-    
-    function renderHologram() {
-        const metal = state.selectedHologram;
-        if (!metal) return;
-
-        const title = qs("#hologram-title");
-        const price = qs("#hologram-price");
-        const faces = qsa(".hologram-face");
+        qs("#token-info-name").textContent = info.name;
+        qs("#token-info-symbol").textContent = info.symbol;
+        qs("#token-info-logo").style.background = info.logo;
+        qs("#token-info-desc").textContent = info.description;
         
-        if (title) title.textContent = metal.name;
-        if (price) price.textContent = `Price: ${metal.price.toLocaleString()} NVR`;
+        const metricsContainer = qs("#token-info-metrics");
+        metricsContainer.innerHTML = ""; // Clear old metrics
         
-        faces.forEach(face => {
-            face.style.background = `linear-gradient(135deg, ${metal.color1}, ${metal.color2})`;
-            face.style.boxShadow = `0 0 20px ${metal.color1}, 0 0 40px ${metal.color2}`;
-        });
+        for (const [label, value] of Object.entries(info.metrics)) {
+            const metricEl = document.createElement("div");
+            metricEl.className = "token-info-metric";
+            metricEl.innerHTML = `
+                <span class="token-info-metric-label">${label}</span>
+                <span class="token-info-metric-value">${value}</span>
+            `;
+            metricsContainer.appendChild(metricEl);
+        }
     }
+
+
+    // REMOVED: renderMetalsVault, renderHologram
 
     // ==============================
     // PAGE/MODE SWITCHING
@@ -2717,59 +2950,49 @@ function renderQuickWallet() {
       
       // Hide all pages
       qsa(".page-container").forEach(p => p.style.display = "none");
+      qs("#demo-mode-banner").style.display = "none";
       
       // Show the selected one
-      const page = qs(`#page-${view}`);
+      let page;
+      if (view === 'spot' || view === 'futures' || view === 'metals' || view === 'demo') {
+        page = qs(`#page-spot`); // All trading views use the 'spot' page container
+        state.mode = view; // Set the trading mode
+        
+        if (view === 'demo') {
+            qs("#demo-mode-banner").style.display = "block";
+            initMockData(); // Reload with demo funds
+        } else if (view === 'spot') {
+            initMockData(); // Reload with real (mock) funds
+        }
+        
+      } else {
+        page = qs(`#page-${view}`); // e.g., page-dex
+      }
+      
       if (page) {
         page.style.display = "flex";
       }
       
-      // Handle page-specific logic
-      if (view === 'spot') {
-        state.mode = 'spot';
-      } else if (view === 'futures') {
-        state.mode = 'futures';
-      }
-      
-      logActivity(`Mapsd to ${view} page`);
+      logActivity(`Switched to ${view} page`);
       renderAll();
       // Recalculate chart data on view switch if it's a chart page
-      if (view === 'spot' || view === 'futures') {
+      if (view === 'spot' || view === 'futures' || view === 'demo' || view === 'metals') {
         initChartData();
         renderChart();
       }
     }
 
-    function switchTradeMode(mode) {
-      state.mode = mode;
-      qsa(".mode-tab").forEach(btn => {
-        btn.classList.toggle("active", btn.dataset.mode === mode);
-      });
-
-      const tradeWrapper = qs("#trade-forms-wrapper");
-      const metalsWrapper = qs("#metals-wrapper");
-      
-      if (mode === "metals") {
-        if(tradeWrapper) tradeWrapper.style.display = "none";
-        if(metalsWrapper) metalsWrapper.style.display = "block";
-      } else {
-        if(tradeWrapper) tradeWrapper.style.display = "block";
-        if(metalsWrapper) metalsWrapper.style.display = "none";
-      }
-
-      logActivity("Switched trade mode to " + mode);
-      renderAll();
-    }
+    // REMOVED: switchTradeMode, it's handled by switchView
 
     function onSelectMarket(m) {
       state.selectedMarket = m;
       logActivity(`Selected market ${m.pair}`);
       
-      generateMockOrderbook();
-      generateMockTrades();
-      initChartData();
-      renderAll();
-      renderQuickWallet();
+      // Fetch new data for this market
+      fetchCexSnapshot();
+      
+      // Renders will happen inside fetchCexSnapshot
+      renderTokenInfo(m); // Update token info panel
     }
 
     // ==============================
@@ -2826,82 +3049,180 @@ function renderQuickWallet() {
     /**
      * REBUILT: submitOrder with full wallet logic.
      */
-    function submitOrder(e) {
+    async function submitOrder(e) {
       e.preventDefault();
 
       if (!state.connected) {
-        showToast("Order Failed", "الرجاء تسجيل الدخول أولاً", "error");
-        openAuthModal();
+        showToast("Order Failed", "Please connect your wallet first", "error");
+        connectAynuWallet();
         return;
       }
 
-      const side = getOrderSide();
-      const price = parseFloat(qs("#input-price").value) || 0;
-      const amount = parseFloat(qs("#input-amount").value) || 0;
-      const total = price * amount;
+      const side  = getOrderSide();               // buy / sell
+      const type  = qs("#order-type")?.value || "limit"; // limit / market / stop-limit
+      const priceEl = qs("#input-price");
+      const amountEl = qs("#input-amount");
 
-      if (!price || !amount || !total) {
-        showToast("Order rejected", "الرجاء إدخال سعر وكمية صالحة", "error");
-        return;
+      let price = parseFloat(priceEl.value) || 0;
+      const amount = parseFloat(amountEl.value) || 0;
+      const stopPrice = parseFloat(qs("#input-stop-price").value) || 0;
+      
+      // For market orders, estimate price
+      if (type === 'market') {
+          price = state.selectedMarket.last;
+      }
+      
+      const total  = price * amount;
+      
+      const sl = parseFloat(qs("#input-sl").value) || 0;
+      const tp = parseFloat(qs("#input-tp").value) || 0;
+
+      // Validation
+      if (type !== 'market' && price <= 0) {
+        showToast("Order rejected", "Please enter a valid price", "error"); return;
+      }
+      if (amount <= 0) {
+        showToast("Order rejected", "Please enter a valid amount", "error"); return;
+      }
+      if (type === 'stop-limit' && stopPrice <= 0) {
+        showToast("Order rejected", "Please enter a valid stop price", "error"); return;
       }
 
-      const baseSymbol = state.selectedMarket.base;
+
+      const baseSymbol  = state.selectedMarket.base;
       const quoteSymbol = state.selectedMarket.quote;
-      const baseWallet = state.walletAssets.find(a => a.asset === baseSymbol);
+      const baseWallet  = state.walletAssets.find(a => a.asset === baseSymbol);
       const quoteWallet = state.walletAssets.find(a => a.asset === quoteSymbol);
 
       if (!baseWallet || !quoteWallet) {
-        showToast("Order Failed", "لم يتم العثور على أصول المحفظة", "error");
+        showToast("Order Failed", "Wallet assets not found", "error");
         return;
       }
 
-      // --- Wallet Logic ---
+      // Check balance
       if (side === 'buy') {
         if (quoteWallet.available < total) {
-          showToast("Order Failed", `رصيد ${quoteSymbol} غير كافٍ.`, "error");
+          showToast("Order Failed", `Insufficient ${quoteSymbol} balance.`, "error");
           return;
         }
-        quoteWallet.available -= total;
-        quoteWallet.inOrders += total;
-      } else { // 'sell'
+      } else { // sell
         if (baseWallet.available < amount) {
-          showToast("Order Failed", `رصيد ${baseSymbol} غير كافٍ.`, "error");
+          showToast("Order Failed", `Insufficient ${baseSymbol} balance.`, "error");
           return;
         }
-        baseWallet.available -= amount;
-        baseWallet.inOrders += amount;
       }
 
-      const logMsg = `تم تقديم الطلب (${state.mode.toUpperCase()}): ${side.toUpperCase()} ${amount.toFixed(4)} ${baseSymbol} @ ${price.toFixed(8)} ${quoteSymbol}`;
+      // Build order for aynu_engine
+      const pair = state.selectedMarket.pair;
+      const nowMs = Date.now();
+      const clientOrderId = `web-${pair.replace('/','-')}-${nowMs}-${Math.floor(Math.random() * 1e6)}`;
+      const traderId = state.wallet || "web-demo";
+
+      const orderEnvelope = {
+        order: {
+          pair:      pair,
+          id:        clientOrderId,
+          type:      type.includes('limit') ? 'limit' : 'market', // Engine understands 'limit' or 'market'
+          side:      side,                 // "buy" / "sell"
+          price:     type === "market" ? 0 : price,
+          stop_price: stopPrice, // Pass stop price
+          quantity:  amount,
+          trader_id: traderId,
+          timestamp: nowMs
+        }
+      };
       
-      if (state.mode === 'futures') {
-        state.positions.push({
-          pair: state.selectedMarket.pair,
-          side: side,
-          size: amount,
-          entry: price,
-          pnl: 0.0
+      // --- NEW: DEMO & FUTURES LOGIC ---
+      if (state.mode === 'futures' || state.mode === 'demo') {
+          const isDemo = state.mode === 'demo';
+          const modeName = isDemo ? "Demo" : "Futures";
+          
+          // Simulate local order/position
+          const newPos = {
+              pair: pair,
+              side: side === 'buy' ? 'long' : 'short',
+              size: amount,
+              entry: state.selectedMarket.last, // Mark at current price
+              leverage: parseInt(qs("#leverage-slider")?.value || 1),
+              sl: sl || null,
+              tp: tp || null,
+          };
+          state.positions.push(newPos);
+          showToast(`${modeName} Position Opened`, `${modeName} ${newPos.side} ${newPos.size} ${baseSymbol} @ ${newPos.entry}`, "success");
+          
+          // Simulate balance change
+          if (side === 'buy') {
+            quoteWallet.available -= total;
+            quoteWallet.inOrders += total;
+          } else {
+            baseWallet.available -= amount;
+            baseWallet.inOrders  += amount;
+          }
+
+          // Clear form
+          amountEl.value = "";
+          recalcTrade();
+          renderAll(); // Will show position in table and on chart
+          return;
+      }
+      // --- END DEMO/FUTURES LOGIC ---
+
+
+      try {
+        const res = await fetch(`${API_BASE_URL}/cex/place`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(orderEnvelope)
         });
-        showToast("Position Opened (UI)", logMsg, "success");
-      } else {
+        const data = await res.json().catch(() => ({}));
+
+        if (!res.ok || data.ok === false) {
+          const msg = data.error || `Engine rejected order (${res.status})`;
+          showToast("Order Failed", msg, "error");
+          return;
+        }
+
+        // On success, update local wallet state
+        if (side === 'buy') {
+          quoteWallet.available -= total;
+          quoteWallet.inOrders += total;
+        } else {
+          baseWallet.available -= amount;
+          baseWallet.inOrders  += amount;
+        }
+
+        // Add to local open orders list
         state.openOrders.push({
-          pair: state.selectedMarket.pair,
+          pair: pair,
           side: side,
+          type: type,
           amount: amount,
           price: price,
+          stopPrice: stopPrice,
           total: total
         });
-        showToast("Order Placed (UI)", logMsg, "success");
-      }
 
-      playOrderAnimation(side); // NEW: Play animation
-      logActivity(logMsg);
-      qs("#input-amount").value = "";
-      recalcTrade();
-      renderAll();
+        const logMsg = `Order sent to AynuEngine · ${side.toUpperCase()} ${amount} ${baseSymbol} @ ${price} ${quoteSymbol} (${pair})`;
+        showToast("Order Placed", logMsg, "success");
+
+        playOrderAnimation(side);
+        logActivity(logMsg);
+
+        // Clear form
+        amountEl.value = "";
+        recalcTrade();
+
+        // Fetch new snapshot to update orderbook
+        fetchCexSnapshot();
+
+      } catch (err) {
+        console.error("submitOrder failed", err);
+        showToast("Network Error", "Could not connect to AynuEngine", "error");
+      }
     }
+
     
-    // NEW: Order Execution Animation
+    // Order Execution Animation
     function playOrderAnimation(side) {
         const btn = qs("#btn-submit-order");
         const chart = qs("#price-chart");
@@ -2938,76 +3259,55 @@ function renderQuickWallet() {
     }
 
     // ==============================
-    // MODAL LOGIC (Auth, Wallet)
+    // MODAL LOGIC (REMOVED)
     // ==============================
-    function openAuthModal() {
-      qs("#auth-modal-backdrop").classList.add("active");
-    }
-    function closeAuthModal() {
-      qs("#auth-modal-backdrop").classList.remove("active");
-    }
-    function openWalletModal() {
-        renderWallet(); // Ensure modal is up-to-date
-        qs("#wallet-modal-backdrop").classList.add("active");
-    }
-    function closeWalletModal() {
-        qs("#wallet-modal-backdrop").classList.remove("active");
-    }
+    // ... openWalletModal, closeWalletModal removed ...
 
-    function deriveHash(str) {
-      let h1 = 0, h2 = 0;
-      for (let i = 0; i < str.length; i++) {
-        const ch = str.charCodeAt(i);
-        h1 = (h1 * 31 + ch) | 0;
-        h2 = (h2 * 131 + ch) | 0;
-      }
-      const mix = ((h1 >>> 0).toString(16) + (h2 >>> 0).toString(16)).padStart(32, "0");
-      return "zk_" + mix.slice(0, 32);
-    }
-
-    function generateZkCommit() {
-      const user = qs("#auth-username").value.trim();
-      const pass = qs("#auth-password").value;
-      const kys = qs("#auth-kys-secret").value;
-      if (!user || !pass || !kys) {
-        showToast("Missing fields", "الرجاء ملء جميع الحقول", "error");
-        return;
-      }
-      const salted = `${user}::${pass}::${kys}`;
-      const commit = deriveHash(salted);
-      state.zkCommit = commit;
-      qs("#auth-commit-preview").value = commit;
-      qs("#zk-status-label").textContent = "تم إنشاء الالتزام (Commit) محلياً";
-      localStorage.setItem("aynu_zk_commit", commit);
-      localStorage.setItem("aynu_user", user);
-      showToast("ZK Commit Ready", "تم إنشاء التزام ZK-KYS محلياً", "success");
-      logActivity(`تم إنشاء التزام ZK للمستخدم ${user}`);
-    }
-
-    function loginWithZk() {
-      if (!state.zkCommit) {
-        generateZkCommit();
-        if (!state.zkCommit) {
-            showToast("No zk-commit", "الرجاء إنشاء التزام أولاً", "error");
-            return;
+    // ==============================================
+    // Aynu Wallet Auth Flow (Simulated)
+    // ==============================================
+    async function connectAynuWallet() {
+      // This is a simulation of the flow.
+      const mockAynuWallet = {
+        address: "amr-galaxy0orca-" + Math.random().toString(16).slice(2, 14),
+        async signMessage(message) {
+          // Simulate signing delay
+          await new Promise(r => setTimeout(r, 300));
+          // Fake signature based on message
+          return "sig_0x" + message.length.toString(16) + Math.random().toString(16).slice(2, 50);
         }
-      }
-      
-      const stored = localStorage.getItem("aynu_zk_commit");
-      if (stored && stored === state.zkCommit) {
-        const user = localStorage.getItem("aynu_user") || "anonymous";
-        state.connected = true;
-        state.wallet = `amr-${user}-${Math.random().toString(16).slice(2, 8)}`;
-        qs("#wallet-label").textContent = `Wallet: ${state.wallet}`;
-        qs("#status-dot").classList.add("online");
-        qs("#status-text").textContent = "RPC: Simulated · Local ZK";
-        showToast("ZK Session", `تم تسجيل الدخول كـ ${user}`, "success");
-        logActivity(`نجاح تسجيل الدخول (ZK) للمستخدم ${user}`);
-        closeAuthModal();
-        renderAll(); // Re-render to update trade button
-      } else {
-        showToast("ZK mismatch", "فشل التحقق من الالتزام (تجريبي)", "error");
-        logActivity("فشل تسجيل الدخول (ZK) - عدم تطابق الالتزام");
+      };
+
+      try {
+        // 1. Simulate getting nonce from server
+        await new Promise(r => setTimeout(r, 200));
+        const nonce = "Login to Aynu CEX: " + Math.floor(Math.random() * 1000000);
+
+        // 2. Internal wallet signs the message
+        const signature = await mockAynuWallet.signMessage(nonce);
+
+        // 3. Simulate sending to server for verification
+        await new Promise(r => setTimeout(r, 400));
+        const verificationSuccess = true; // Always succeed in demo
+
+        if (verificationSuccess) {
+          state.connected = true;
+          state.wallet = mockAynuWallet.address;
+          
+          qs("#wallet-label").textContent = "Wallet: " + state.wallet;
+          qs("#status-dot").classList.add("online");
+          qs("#status-text").textContent = "RPC: Connected (NebulaNet)";
+          
+          showToast("Success", "Aynu Wallet Connected", "success");
+          logActivity(`Wallet connected: ${state.wallet}`);
+          
+          renderAll(); // Re-render to update trade button
+        } else {
+          showToast("Error", "Invalid signature (demo)", "error");
+        }
+
+      } catch (e) {
+        showToast("Error", "Wallet connection failed (demo)", "error");
       }
     }
     
@@ -3022,7 +3322,7 @@ function renderQuickWallet() {
         const themeSelect = qs("#chart-theme");
         if (themeSelect) themeSelect.value = themeName;
         
-        logActivity(`تم تغيير الثيم إلى: ${themeName}`);
+        logActivity(`Theme changed to: ${themeName}`);
         renderChart();
     }
 
@@ -3042,7 +3342,10 @@ function renderQuickWallet() {
     // ==============================
     function updateOhlcLabel(candle) {
       const row = qs("#chart-ohlc-row");
-      if (!row || !candle) return;
+      if (!row || !candle) {
+          if (row) row.innerHTML = `<span>O: ...</span><span>H: ...</span><span>L: ...</span><span>C: ...</span>`;
+          return;
+      }
 
       const dirClass = candle.close >= candle.open ? "up" : "down";
       row.innerHTML = `
@@ -3050,10 +3353,27 @@ function renderQuickWallet() {
         <span>H: ${candle.high.toFixed(8)}</span>
         <span>L: ${candle.low.toFixed(8)}</span>
         <span class="${dirClass}">C: ${candle.close.toFixed(8)}</span>
+        <span>Vol: ${candle.volume.toFixed(2)}</span>
       `;
     }
 
+    // Helper function to map price to Y-coordinate
+    function yFor(price, min, max, height, padTop, padBottom) {
+        const drawHeight = height - padTop - padBottom;
+        const priceRange = max - min;
+        if (priceRange <= 0) return padTop + drawHeight / 2; // Default to middle
+        
+        const ratio = (price - min) / priceRange;
+        return padTop + (1 - ratio) * drawHeight;
+    }
+
     function renderChart() {
+      renderMainChart();
+      renderSubChart(); // NEW: Render indicators
+      renderChartDrawings(); // Render drawings on top
+    }
+    
+    function renderMainChart() {
       const canvas = qs("#price-chart");
       if (!canvas) return;
 
@@ -3072,6 +3392,11 @@ function renderQuickWallet() {
 
       const candles = chartState.candles;
       if (!candles || candles.length === 0) {
+        ctx.fillStyle = chartState.theme === 'holographic' ? 'var(--text-muted)' : 'rgba(150, 170, 255, 0.8)';
+        ctx.font = "14px system-ui";
+        ctx.textAlign = "center";
+        ctx.fillText("No candle data available for this pair...", rect.width / 2, rect.height / 2);
+        updateOhlcLabel(null);
         ctx.restore();
         return;
       }
@@ -3082,20 +3407,16 @@ function renderQuickWallet() {
       const upColor = chartState.theme === 'holographic' ? 'var(--accent-3)' : chartState.upColor;
       const downColor = chartState.theme === 'holographic' ? 'var(--accent-4)' : chartState.downColor;
       const gridColor = chartState.theme === 'holographic' ? 'rgba(0, 255, 255, 0.2)' : 'rgba(255, 255, 255, 0.06)';
-      // FIX: Added space between 'const' and 'textColor'
       const textColor = chartState.theme === 'holographic' ? 'var(--text-muted)' : 'rgba(150, 170, 255, 0.8)';
 
       const bgLayer = qs(".chart-canvas");
       const lineBg = qs("#chart-line-bg");
-      if (chartState.theme === "minimal") {
-        bgLayer.style.background = "linear-gradient(180deg,#080910,#05040d)";
-        lineBg.style.opacity = "0.04";
-      } else if (chartState.theme === "neon") {
-        bgLayer.style.background = "radial-gradient(circle at top,#222b5a,#05030b)";
-        lineBg.style.opacity = "0.20";
-      } else if (chartState.theme === "holographic") {
+      if (chartState.theme === "holographic") {
          // Handled by CSS
-      } else {
+      } else if (chartState.theme === "evening") {
+        bgLayer.style.background = "linear-gradient(180deg,#1c122a,#0e0513)";
+        lineBg.style.opacity = "0.20";
+      } else { // night
         bgLayer.style.background = "linear-gradient(180deg,rgba(21,28,68,0.9),rgba(8,7,22,0.98))";
         lineBg.style.opacity = "0.12";
       }
@@ -3108,7 +3429,7 @@ function renderQuickWallet() {
       const paddingTop = 10;
       const paddingBottom = 14;
       const width = rect.width - paddingLeft - paddingRight;
-      const height = rect.height - paddingTop - paddingBottom;
+      const height = rect.height; // Use full height for yFor
 
       const { minPrice, maxPrice } = chartState;
       if (!isFinite(minPrice) || !isFinite(maxPrice)) {
@@ -3123,10 +3444,32 @@ function renderQuickWallet() {
       const slotWidth = width / candleCount;
       const candleWidth = Math.max(4, slotWidth * 0.6);
 
-      function yFor(price) {
-        const ratio = (price - minPrice) / priceRange;
-        return paddingTop + (1 - ratio) * height;
+      // --- Draw Y-Axis (Price Scale) ---
+      ctx.strokeStyle = gridColor;
+      ctx.fillStyle = textColor;
+      ctx.lineWidth = 1;
+      ctx.font = "10px 'JetBrains Mono', monospace";
+      ctx.textAlign = "left";
+      ctx.textBaseline = "middle";
+
+      ctx.beginPath();
+      ctx.moveTo(width + paddingLeft, paddingTop);
+      ctx.lineTo(width + paddingLeft, height - paddingBottom);
+      ctx.stroke();
+
+      const numLabels = 5;
+      for (let i = 0; i <= numLabels; i++) {
+        const ratio = i / numLabels;
+        const price = maxPrice - (priceRange * ratio);
+        const y = yFor(price, minPrice, maxPrice, height, paddingTop, paddingBottom);
+
+        ctx.beginPath();
+        ctx.moveTo(width + paddingLeft, y);
+        ctx.lineTo(width + paddingLeft + 5, y);
+        ctx.stroke();
+        ctx.fillText(price.toFixed(8), width + paddingLeft + 8, y);
       }
+
 
       // LINE mode
       if (chartState.type === "line") {
@@ -3136,18 +3479,18 @@ function renderQuickWallet() {
 
         candles.forEach((c, i) => {
           const xCenter = paddingLeft + (i + 0.5) * slotWidth;
-          const y = yFor(c.close);
+          const y = yFor(c.close, minPrice, maxPrice, height, paddingTop, paddingBottom);
           if (i === 0) ctx.moveTo(xCenter, y);
           else ctx.lineTo(xCenter, y);
         });
         ctx.stroke();
 
-        ctx.lineTo(paddingLeft + (candleCount - 0.5) * slotWidth, paddingTop + height);
-        ctx.lineTo(paddingLeft + (0.5) * slotWidth, paddingTop + height);
+        ctx.lineTo(paddingLeft + (candleCount - 0.5) * slotWidth, height - paddingBottom);
+        ctx.lineTo(paddingLeft + (0.5) * slotWidth, height - paddingBottom);
         ctx.closePath();
         ctx.fillStyle = chartState.theme === 'holographic' ? 'rgba(0, 255, 255, 0.15)' : "rgba(126,203,255,0.12)";
         ctx.fill();
-
+        
         ctx.restore();
         return;
       }
@@ -3156,10 +3499,10 @@ function renderQuickWallet() {
       candles.forEach((c, i) => {
         const xCenter = paddingLeft + (i + 0.5) * slotWidth;
         const x = xCenter - candleWidth / 2;
-        const yOpen = yFor(c.open);
-        const yClose = yFor(c.close);
-        const yHigh = yFor(c.high);
-        const yLow = yFor(c.low);
+        const yOpen = yFor(c.open, minPrice, maxPrice, height, paddingTop, paddingBottom);
+        const yClose = yFor(c.close, minPrice, maxPrice, height, paddingTop, paddingBottom);
+        const yHigh = yFor(c.high, minPrice, maxPrice, height, paddingTop, paddingBottom);
+        const yLow = yFor(c.low, minPrice, maxPrice, height, paddingTop, paddingBottom);
         const isUp = c.close >= c.open;
         const color = isUp ? upColor : downColor;
 
@@ -3183,33 +3526,163 @@ function renderQuickWallet() {
         ctx.fillRect(x, bodyTop, candleWidth, bodyHeight);
       });
 
-      // --- Draw Y-Axis (Price Scale) ---
-      ctx.strokeStyle = gridColor;
-      ctx.fillStyle = textColor;
-      ctx.lineWidth = 1;
-      ctx.font = "10px 'JetBrains Mono', monospace";
-      ctx.textAlign = "left";
-      ctx.textBaseline = "middle";
-
-      ctx.beginPath();
-      ctx.moveTo(width + paddingLeft, paddingTop);
-      ctx.lineTo(width + paddingLeft, height + paddingTop);
-      ctx.stroke();
-
-      const numLabels = 5;
-      for (let i = 0; i <= numLabels; i++) {
-        const ratio = i / numLabels;
-        const price = maxPrice - (priceRange * ratio);
-        const y = paddingTop + (height * ratio);
-
-        ctx.beginPath();
-        ctx.moveTo(width + paddingLeft, y);
-        ctx.lineTo(width + paddingLeft + 5, y);
-        ctx.stroke();
-        ctx.fillText(price.toFixed(8), width + paddingLeft + 8, y);
-      }
-
       ctx.restore();
+    }
+    
+    /**
+     * NEW: Render Sub-Chart (Indicators)
+     */
+    function renderSubChart() {
+      const canvas = qs("#sub-chart");
+      if (!canvas) return;
+
+      const rect = canvas.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) return;
+
+      const dpr = window.devicePixelRatio || 1;
+      const ctx = canvas.getContext("2d");
+
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      ctx.save();
+      ctx.scale(dpr, dpr);
+      ctx.clearRect(0, 0, rect.width, rect.height);
+      
+      const candles = chartState.candles;
+      
+      // If no indicators, clear and hide
+      if (!chartState.indicators.volume && !chartState.indicators.rsi && !chartState.indicators.macd) {
+          qs(".chart-sub-wrapper").style.display = "none";
+          ctx.restore();
+          return;
+      }
+      
+      qs(".chart-sub-wrapper").style.display = "block";
+      
+      // --- Render Volume ---
+      if (chartState.indicators.volume && candles && candles.length > 0) {
+          const paddingLeft = 8;
+          const paddingRight = chartState.yAxisWidth;
+          const paddingTop = 10;
+          const paddingBottom = 10;
+          const width = rect.width - paddingLeft - paddingRight;
+          const height = rect.height;
+          const drawHeight = height - paddingTop - paddingBottom;
+
+          const maxVol = Math.max(...candles.map(c => c.volume));
+          if (maxVol <= 0) { ctx.restore(); return; }
+          
+          const candleCount = candles.length;
+          const slotWidth = width / candleCount;
+          const candleWidth = Math.max(4, slotWidth * 0.6);
+          
+          candles.forEach((c, i) => {
+              const xCenter = paddingLeft + (i + 0.5) * slotWidth;
+              const x = xCenter - candleWidth / 2;
+              const volRatio = c.volume / maxVol;
+              const barHeight = volRatio * drawHeight;
+              const yTop = paddingTop + (drawHeight - barHeight);
+              
+              const isUp = c.close >= c.open;
+              ctx.fillStyle = isUp ? "var(--success)" : "var(--danger)";
+              ctx.globalAlpha = 0.3;
+              ctx.fillRect(x, yTop, candleWidth, barHeight);
+              ctx.globalAlpha = 1.0;
+          });
+      }
+      
+      // (Placeholder for RSI/MACD rendering)
+      
+      ctx.restore();
+    }
+    
+    /**
+     * Render orders and positions on the drawing canvas
+     */
+    function renderChartDrawings() {
+        const canvas = qs("#draw-canvas");
+        const mainChartCanvas = qs("#price-chart");
+        if (!canvas || !mainChartCanvas) return;
+        
+        const rect = mainChartCanvas.getBoundingClientRect(); // Get size from main chart
+        if (rect.width === 0 || rect.height === 0) return;
+
+        const dpr = window.devicePixelRatio || 1;
+        const ctx = canvas.getContext("2d");
+
+        canvas.width = rect.width * dpr;
+        canvas.height = rect.height * dpr;
+        ctx.save();
+        ctx.scale(dpr, dpr);
+        ctx.clearRect(0, 0, rect.width, rect.height);
+        
+        const paddingLeft = 8;
+        const paddingRight = chartState.yAxisWidth;
+        const paddingTop = 10;
+        const paddingBottom = 14;
+        const width = rect.width - paddingLeft - paddingRight;
+        const height = rect.height;
+        
+        const { minPrice, maxPrice } = chartState;
+
+        // 1. Draw Open Orders (Spot)
+        state.openOrders.forEach(o => {
+            const y = yFor(o.price, minPrice, maxPrice, height, paddingTop, paddingBottom);
+            const color = o.side === 'buy' ? 'var(--success)' : 'var(--danger)';
+            const label = `${o.side.toUpperCase()} ${o.type} ${o.amount}`;
+            
+            ctx.beginPath();
+            ctx.setLineDash([5, 3]);
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 1;
+            ctx.moveTo(paddingLeft, y);
+            ctx.lineTo(width, y);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            
+            ctx.fillStyle = color;
+            ctx.fillRect(paddingLeft + 5, y - 8, ctx.measureText(label).width + 8, 16);
+            ctx.fillStyle = '#ffffff';
+            ctx.font = "10px system-ui";
+            ctx.textBaseline = "middle";
+            ctx.textAlign = "left";
+            ctx.fillText(label, paddingLeft + 9, y);
+        });
+        
+        // 2. Draw Open Positions (Futures)
+        state.positions.forEach(p => {
+            const y = yFor(p.entry, minPrice, maxPrice, height, paddingTop, paddingBottom);
+            const color = p.side === 'long' ? 'var(--success)' : 'var(--danger)';
+            const label = `${p.side.toUpperCase()} ${p.size} @ ${p.entry.toFixed(8)}`;
+            
+            // Draw entry price line
+            ctx.beginPath();
+            ctx.setLineDash([]);
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 1;
+            ctx.moveTo(paddingLeft, y);
+            ctx.lineTo(width, y);
+            ctx.stroke();
+
+            // Calculate PnL for the box
+            const markPrice = state.selectedMarket.last;
+            const pnlValue = (markPrice - p.entry) * p.size * (p.side === 'long' ? 1 : -1);
+            const pnlColor = pnlValue >= 0 ? 'var(--success)' : 'var(--danger)';
+            const pnlLabel = `PnL: ${pnlValue.toFixed(4)}`;
+
+            // Draw box at the end of the line
+            const boxWidth = ctx.measureText(pnlLabel).width + 8;
+            ctx.fillStyle = pnlColor;
+            ctx.fillRect(width - boxWidth, y - 8, boxWidth, 16);
+            
+            ctx.fillStyle = '#ffffff';
+            ctx.font = "10px system-ui";
+            ctx.textBaseline = "middle";
+            ctx.textAlign = "right";
+            ctx.fillText(pnlLabel, width - 4, y);
+        });
+
+        ctx.restore();
     }
 
 
@@ -3233,26 +3706,65 @@ function renderQuickWallet() {
         btn.addEventListener("click", () => {
           qsa(".chart-mode-btn").forEach(b => b.classList.remove("active"));
           btn.classList.add("active");
-          chartState.timeFrame = btn.dataset.tf;
-          chartState.candles = buildRandomCandles(state.selectedMarket.last, 80, chartState.timeFrame);
           
+          chartState.timeFrame = btn.dataset.tf || "1m";
+
+          // Rebuild candles from state.trades
+          chartState.candles = buildCandlesFromTrades(
+            state.trades,
+            chartState.timeFrame,
+            80
+          );
+
+          // Recalculate price range
           const prices = chartState.candles.flatMap(c => [c.high, c.low]);
-          let minP = Math.min(...prices);
-          let maxP = Math.max(...prices);
-          const padding = (maxP - minP) * 0.1;
-          chartState.minPrice = minP - padding;
-          chartState.maxPrice = maxP + padding;
+          if (prices.length > 0) {
+            let minP = Math.min(...prices);
+            let maxP = Math.max(...prices);
+            const padding = (maxP - minP) * 0.1 || minP * 0.05;
+            chartState.minPrice = minP - padding;
+            chartState.maxPrice = maxP + padding;
+          } else {
+            // No data, use initChartData to set defaults
+            initChartData();
+          }
 
           logActivity(`Timeframe: ${chartState.timeFrame}`);
           renderChart();
         });
       });
+      
+      // NEW: Indicators
+      const indBtn = qs("#chart-indicators-btn");
+      const indPanel = qs("#indicators-panel");
+      if (indBtn) indBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          if (indPanel) indPanel.classList.toggle("active");
+      });
+      qsa("#indicators-panel input").forEach(check => {
+          check.addEventListener("change", (e) => {
+              const id = e.target.id;
+              if (id === 'ind-vol') chartState.indicators.volume = e.target.checked;
+              if (id === 'ind-rsi') chartState.indicators.rsi = e.target.checked;
+              if (id === 'ind-macd') chartState.indicators.macd = e.target.checked;
+              
+              if (id !== 'ind-vol') { // Placeholders
+                if(e.target.checked) showToast("Coming Soon", `${id.replace('ind-','').toUpperCase()} indicator is in development.`, "info");
+                e.target.checked = false;
+                chartState.indicators[id.replace('ind-','')] = false;
+              }
+              
+              renderChart();
+          });
+      });
+      
 
       // settings panel toggle
       const toggle = qs("#chart-settings-toggle");
       const panel = qs("#chart-settings-panel");
       if (toggle) {
-        toggle.addEventListener("click", () => {
+        toggle.addEventListener("click", (e) => {
+          e.stopPropagation();
           if (panel) panel.classList.toggle("active");
         });
       }
@@ -3312,10 +3824,9 @@ function renderQuickWallet() {
           btn.classList.add("active");
           
           const view = btn.dataset.view;
-          if (view === "kyc") {
-            openAuthModal();
-          } else if (view === "wallet") {
-            openWalletModal();
+          if (view === "connect") {
+            // 'Connect' tab now also tries to connect wallet
+            connectAynuWallet();
           } else {
             switchView(view);
           }
@@ -3336,20 +3847,16 @@ function renderQuickWallet() {
       
       const btnRefreshMarkets = qs("#btn-refresh-markets");
       if(btnRefreshMarkets) btnRefreshMarkets.addEventListener("click", () => {
-        generateMockOrderbook();
-        renderOrderbook();
-        renderMarkets();
-        showToast("Markets", "تم تحديث الأسواق", "info");
+        fetchCexSnapshot(); // Fetch all data
+        showToast("Markets", "Markets refreshed", "info");
       });
 
-      // mode tabs
-      qsa(".mode-tab").forEach(btn => {
-        btn.addEventListener("click", () => {
-          switchTradeMode(btn.dataset.mode);
-        });
-      });
+      // REMOVED: mode tabs (now part of nav)
 
       // order form
+      const orderTypeSelect = qs("#order-type");
+      if (orderTypeSelect) orderTypeSelect.addEventListener("change", updateTradeFormUI);
+      
       const inputPrice = qs("#input-price");
       if (inputPrice) inputPrice.addEventListener("input", recalcTrade);
 
@@ -3366,76 +3873,113 @@ function renderQuickWallet() {
           const side = btn.dataset.side;
           const submit = qs("#btn-submit-order");
           if (submit) {
-            submit.textContent = `Place ${side.charAt(0).toUpperCase() + side.slice(1)} Order`;
             submit.classList.toggle("sell", side === "sell");
             if (state.connected) {
-                submit.textContent = side === 'buy' ? "Place Buy Order" : "Place Sell Order";
+                if (state.mode === 'futures') {
+                    submit.textContent = side === 'buy' ? "Open Long" : "Open Short";
+                } else {
+                    submit.textContent = side === 'buy' ? "Place Buy Order" : "Place Sell Order";
+                }
+            } else {
+                submit.textContent = "Connect Wallet to Trade";
             }
           }
         });
       });
       const tradeForm = qs("#trade-form");
       if (tradeForm) tradeForm.addEventListener("submit", submitOrder);
+      
+      // NEW: Leverage Dropdown Logic
+      const levBtn = qs("#leverage-dropdown-btn");
+      const levPopover = qs("#leverage-popover");
+      const levSlider = qs("#leverage-slider");
+      const levDisplay = qs("#leverage-display"); // The one on the button
+      const levCustomDisplay = qs("#leverage-custom-display"); // The one in the popover
+      const levBadge = qs("#leverage-badge");
+
+      // Function to set leverage
+      function setLeverage(val) {
+          val = parseInt(val);
+          if (levSlider) levSlider.value = val;
+          if (levDisplay) levDisplay.textContent = `${val}x`;
+          if (levCustomDisplay) levCustomDisplay.textContent = `${val}x`;
+          if (levBadge) levBadge.textContent = `Isolated · ${val}x`;
+      }
+
+      // Toggle Popover
+      if (levBtn) levBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          if (levPopover) levPopover.classList.toggle("active");
+      });
+      
+      // Close popover when clicking outside
+      window.addEventListener("click", (e) => {
+          // Close leverage popover
+          if (levPopover && levPopover.classList.contains("active") && !levPopover.contains(e.target) && e.target !== levBtn) {
+              levPopover.classList.remove("active");
+          }
+          
+          // Close indicators popover
+          const indPanel = qs("#indicators-panel");
+          const indBtn = qs("#chart-indicators-btn");
+          if (indPanel && indPanel.classList.contains("active") && !indPanel.contains(e.target) && e.target !== indBtn) {
+              indPanel.classList.remove("active");
+          }
+          
+          // Close settings popover
+          const setPanel = qs("#chart-settings-panel");
+          const setBtn = qs("#chart-settings-toggle");
+          if (setPanel && setPanel.classList.contains("active") && !setPanel.contains(e.target) && e.target !== setBtn) {
+              setPanel.classList.remove("active");
+          }
+      });
+
+      // Quick Buttons
+      qsa(".leverage-quick-btn").forEach(btn => {
+          btn.addEventListener("click", () => {
+              setLeverage(btn.dataset.lev);
+              if (levPopover) levPopover.classList.remove("active"); // Close on select
+          });
+      });
+
+      // Slider Input
+      if (levSlider) levSlider.addEventListener("input", (e) => {
+          setLeverage(e.target.value);
+      });
+
 
       // trades / orderbook buttons
       const btnSyncOrderbook = qs("#btn-sync-orderbook");
       if (btnSyncOrderbook) btnSyncOrderbook.addEventListener("click", () => {
-        generateMockOrderbook();
-        renderOrderbook();
-        showToast("Orderbook", "تم تحديث دفتر الطلبات", "info");
+        fetchDepthForCurrent().then(renderOrderbook);
+        showToast("Orderbook", "Orderbook refreshed", "info");
       });
       const btnRefreshTrades = qs("#btn-refresh-trades");
       if (btnRefreshTrades) btnRefreshTrades.addEventListener("click", () => {
-        generateMockTrades();
-        renderTrades();
-        showToast("Trades", "تم تحديث الصفقات", "info");
+        fetchTradesForCurrent().then(renderTrades);
+        showToast("Trades", "Trades refreshed", "info");
       });
 
-      // wallet actions (in modal)
-      const btnDeposit = qs("#btn-deposit");
-      if (btnDeposit) btnDeposit.addEventListener("click", () => showToast("Deposit", "هذه ميزة تجريبية", "info"));
-      
-      const btnWithdraw = qs("#btn-withdraw");
-      if (btnWithdraw) btnWithdraw.addEventListener("click", () => showToast("Withdraw", "هذه ميزة تجريبية", "info"));
+      // wallet actions (in modal) - REMOVED
       
       const btnCloseAll = qs("#btn-close-all");
       if (btnCloseAll) btnCloseAll.addEventListener("click", () => {
-        if (state.mode === 'futures') {
+        if (state.mode === 'futures' || state.mode === 'demo') {
             state.positions = [];
-            showToast("Positions", "تم إغلاق جميع الصفقات (تجريبي)", "info");
+            showToast("Positions", "All positions closed (demo)", "info");
         } else {
             state.openOrders = [];
-            showToast("Orders", "تم إلغاء جميع الطلبات (تجريبي)", "info");
+            showToast("Orders", "All orders cancelled (demo)","info");
         }
         renderActiveOrdersAndPositions();
+        renderChartDrawings(); // Clear drawings
       });
 
-      // auth modal
-      const btnOpenAuth = qs("#btn-open-auth");
-      if (btnOpenAuth) btnOpenAuth.addEventListener("click", openAuthModal);
+      // Bind new auth button
+      const btnConnect = qs("#btn-connect-wallet");
+      if (btnConnect) btnConnect.addEventListener("click", connectAynuWallet);
 
-      const btnAuthClose = qs("#btn-auth-close");
-      if (btnAuthClose) btnAuthClose.addEventListener("click", closeAuthModal);
-
-      const btnGenZk = qs("#btn-generate-zk");
-      if (btnGenZk) btnGenZk.addEventListener("click", generateZkCommit);
-      
-      const btnLoginZk = qs("#btn-login-zk");
-      if (btnLoginZk) btnLoginZk.addEventListener("click", loginWithZk);
-      
-      const authBackdrop = qs("#auth-modal-backdrop");
-      if (authBackdrop) authBackdrop.addEventListener("click", evt => {
-        if (evt.target === authBackdrop) closeAuthModal();
-      });
-      
-      // wallet modal
-      const btnWalletClose = qs("#btn-wallet-close");
-      if (btnWalletClose) btnWalletClose.addEventListener("click", closeWalletModal);
-      
-      const walletBackdrop = qs("#wallet-modal-backdrop");
-      if (walletBackdrop) walletBackdrop.addEventListener("click", evt => {
-        if (evt.target === walletBackdrop) closeWalletModal();
-      });
+      // REMOVED: wallet modal listeners
 
       // Chart settings
       bindChartSettings();
@@ -3493,31 +4037,9 @@ function renderQuickWallet() {
         }
       });
       
-      const btnRefreshQuickWallet = qs("#btn-refresh-quick-wallet");
-      if (btnRefreshQuickWallet) {
-        btnRefreshQuickWallet.addEventListener("click", () => {
-          renderQuickWallet();
-          showToast("المحفظة السريعة", "تم تحديث الأرصدة", "info");
-        });
-      }
+      // REMOVED: Quick Wallet Listeners
 
-      const quickWalletBody = qs("#quick-wallet-body");
-      if (quickWalletBody) {
-        quickWalletBody.addEventListener("click", (e) => {
-          const target = e.target.closest(".quick-wallet-btn");
-          if (!target) return;
-          
-          const action = target.dataset.action;
-          const asset = target.dataset.asset;
-          
-          if (action === "deposit") {
-            showToast(`إيداع ${asset}`, "هذه ميزة تجريبية", "info");
-          } else if (action === "withdraw") {
-            showToast(`سحب ${asset}`, "هذه ميزة تجريبية", "info");
-          }
-        });
-      }
-      // NEW: Quick Actions HUD
+      // Quick Actions HUD
       canvas.addEventListener("contextmenu", (e) => {
           e.preventDefault();
           const hud = qs("#quick-actions-hud");
@@ -3532,83 +4054,57 @@ function renderQuickWallet() {
           }
       });
       
-      // FIX: Add null checks
       const hudBuy = qs("#hud-buy-market");
       if (hudBuy) hudBuy.addEventListener("click", () => {
-          showToast("Quick Action", "تم تنفيذ: شراء بسعر السوق (تجريبي)", "success");
+          showToast("Quick Action", "Executed: Buy Market (demo)", "success");
           qs("#quick-actions-hud").style.display = 'none';
       });
       
       const hudSell = qs("#hud-sell-market");
       if (hudSell) hudSell.addEventListener("click", () => {
-          showToast("Quick Action", "تم تنفيذ: بيع بسعر السوق (تجريبي)", "error");
+          showToast("Quick Action", "Executed: Sell Market (demo)", "error");
           qs("#quick-actions-hud").style.display = 'none';
       });
 
-      // NEW: Drawing Tools
+      // Drawing Tools
       qsa(".drawing-tool-btn").forEach(btn => {
           btn.addEventListener("click", () => {
               qsa(".drawing-tool-btn").forEach(b => b.classList.remove("active"));
               btn.classList.add("active");
               chartState.currentTool = btn.dataset.tool;
-              logActivity(`أداة الرسم: ${chartState.currentTool}`);
+              logActivity(`Draw tool: ${chartState.currentTool}`);
           });
       });
 
-      // NEW: 3D Depth Map Button
+      // 3D Depth Map Button
       const depthBtn = qs("#btn-depth-chart");
       if(depthBtn) depthBtn.addEventListener("click", () => {
-          showToast("3D Depth Map", "سيتم عرض خريطة العمق ثلاثية الأبعاد هنا (قيد التطوير)", "info");
+          showToast("3D Depth Map", "3D Depth Map will be shown here (in development)", "info");
       });
-    }
-
-    function initAnimationTick() {
-      setInterval(() => {
-        if (state.view !== 'spot') return; // Only update chart on spot page
-
-        const m = state.selectedMarket;
-        if (!m) return;
-        
-        const delta = (Math.random() - 0.5) * (m.last * 0.005);
-        m.last = Math.max(0.00000001, m.last + delta);
-        m.change += (Math.random() - 0.5) * 0.05;
-
-        const candles = chartState.candles;
-        if (candles.length > 0) {
-          const last = candles[candles.length - 1];
-          const newClose = m.last;
-          const updated = {
-            ...last,
-            close: newClose,
-            high: Math.max(last.high, newClose),
-            low: Math.min(last.low, newClose)
-          };
-          candles[candles.length - 1] = updated;
-        }
-        
-        renderHud(m);
-        renderChart();
-      }, 3500);
     }
 
     // ==============================
     // INIT
     // ==============================
     function init() {
-      initMockData();
       bindEvents();
-      
-      // Set initial page view
-      switchView('spot'); 
-      
-      // Set initial theme
-      applyTimeBasedTheme(); 
 
-      logActivity("Aynu CEX UI مُهيأ · تم تطبيق تصميم باينانس الاحترافي");
-      initAnimationTick();
+      // Set initial page view
+      switchView('spot');
+
+      // Set initial theme
+      applyTimeBasedTheme();
+
+      logActivity("Aynu CEX UI Initialized · Connecting to AynuEngine via Node.");
+
+      // Use real data from /cex/*
+      initLiveData();
     }
 
     window.addEventListener("load", init);
   </script>
+
+  <!-- REMOVED: Second script block for wallet page -->
+
 </body>
 </html>
